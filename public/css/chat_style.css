@@ -56,6 +56,7 @@ img{ max-width:100%;}
     border-bottom: 1px solid #c4c4c4;
     margin: 0;
     padding: 18px 16px 10px;
+    cursor: pointer;
 }
 .inbox_chat { height: 550px; overflow-y: scroll;}
 
@@ -119,7 +120,7 @@ img{ max-width:100%;}
 
 .type_msg {border-top: 1px solid #c4c4c4;position: relative;}
 .msg_send_btn {
-    background: #2017ff none repeat scroll 0 0;
+    background: white none repeat scroll 0 0;
     border: medium none;
     border-radius: 50%;
     color: #fff;

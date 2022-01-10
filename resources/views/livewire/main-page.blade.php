@@ -30,7 +30,6 @@
                             <div class="chat_img"> <img src="https://library.kissclipart.com/20180913/hfe/kissclipart-helpdesk-icon-clipart-help-desk-computer-icons-cli-37cda048479ee068.png" alt="sunil"> </div>
                             <div class="chat_ib">
                                 <h5>Narek<span class="chat_date">Dec 25</span></h5>
-                                <button onclick="/#">click here</button>
                             </div>
                         </div>
                     </div>
@@ -113,7 +112,10 @@
                 <div class="type_msg">
                     <div class="input_msg_write">
                         <input type="text" class="write_msg" placeholder="Type a message" />
-                        <button class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+
+                        <button class="msg_send_btn" type="button">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/0/0c/Message_%28Send%29.png" width="28px">
+                        </button>
                     </div>
                 </div>
             </div>
