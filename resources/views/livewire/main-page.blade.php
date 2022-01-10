@@ -45,7 +45,7 @@
                             </div>
                         </div>
                     @endforeach
-                    <hr style="height:30px; width:50%; border-width:0;">
+                    <hr style="height:5px; width:100%; border-width:0;">
                     <div class="headind_srch">
                         <div class="recent_heading">
                             <h4>Rooms</h4>
@@ -60,9 +60,9 @@
                     </div>
                     <div class="chat_list">
                         <div class="chat_people">
-                            <div class="chat_img"> <img src="https://static.thenounproject.com/png/862013-200.png" alt="sunil"> </div>
+                            <div class="chat_img"> <img src="https://cdn.iconscout.com/icon/premium/png-256-thumb/chat-room-3-1058983.png" alt="sunil"> </div>
                             <div class="chat_ib">
-                                <h5>Narek<span class="chat_date">Dec 25</span></h5>
+                                <h5>General room<span class="chat_date">Dec 25</span></h5>
                                 <p>aaa@gmail.com</p>
                             </div>
                         </div>
@@ -75,13 +75,13 @@
                         <div class="incoming_msg_img"> <img src="https://static.thenounproject.com/png/862013-200.png" alt="sunil"> </div>
                         <div class="received_msg">
                             <div class="received_withd_msg">
-                                <p>Lorem ipsum</p>
+                                <p>Lorem ipsum<br>Lorem ipsum</p>
                                 <span class="time_date"> 11:01 AM    |    June 9</span></div>
                         </div>
                     </div>
                     <div class="outgoing_msg">
                         <div class="sent_msg">
-                            <p>Lorem ipsum</p>
+                            <p>Lorem ipsum<br>Lorem ipsum</p>
                             <span class="time_date"> 11:01 AM    |    June 9</span> </div>
                     </div>
                     <div class="incoming_msg">
@@ -101,7 +101,7 @@
                         <div class="incoming_msg_img"> <img src="https://static.thenounproject.com/png/862013-200.png" alt="sunil"> </div>
                         <div class="received_msg">
                             <div class="received_withd_msg">
-                                <p>Lorem ipsum</p>
+                                <p>Lorem ipsum<br>Lorem ipsum</p>
                                 <span class="time_date"> 11:01 AM    |    Today</span></div>
                         </div>
                     </div>
