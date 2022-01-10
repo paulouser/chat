@@ -45,12 +45,11 @@
                             </div>
                         </div>
                     @endforeach
+                    <hr style="height:5px; width:100%; border-width:0;">
                     <div class="headind_srch">
                         <div class="recent_heading">
                             <h4>Rooms</h4>
-                            <button class="plus-button"></button>
                         </div>
-
                         <div class="srch_bar">
                             <div class="stylish-input-group">
                                 <input type="text" class="search-bar"  placeholder="Search" >
@@ -60,7 +59,7 @@
                         </div>
                     </div>
                     <div class="chat_list">
-                        <div class="chat_people active_chat">
+                        <div class="chat_people">
                             <div class="chat_img"> <img src="https://cdn.iconscout.com/icon/premium/png-256-thumb/chat-room-3-1058983.png" alt="sunil"> </div>
                             <div class="chat_ib">
                                 <h5>General room<span class="chat_date">Dec 25</span></h5>
