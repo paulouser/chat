@@ -45,11 +45,14 @@
                             </div>
                         </div>
                     @endforeach
-                    <hr style="height:5px; width:100%; border-width:0;">
                     <div class="headind_srch">
                         <div class="recent_heading">
                             <h4>Rooms</h4>
                         </div>
+                            <div>
+                                <button class="plus-button"></button>
+                        </div>
+
                         <div class="srch_bar">
                             <div class="stylish-input-group">
                                 <input type="text" class="search-bar"  placeholder="Search" >
