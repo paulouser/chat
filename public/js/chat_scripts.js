@@ -8,8 +8,25 @@ $(document).ready(function(){
     });
 
     $('.chat_list').click(function() {
-        console.log($(this).data("id"))
+        $.ajax({
+            url: "/chat/" + $(this).data("id"),
+            success: function (data){
+                $(".msg_history").empty();
+                let ch = '';
+                for(let d of data) {
+                    ch += '<button>' + d.id + '</button>';
+                    console.log(d)
+                }
+                $(".msg_history").html(ch);
+                console.log('success', data)
+            }
+        });
+
+
+        // console.log($(this).data("id"));
+        // $(this).data("my_id", $(this).data("my_id"));
     });
+
 
     $(".chat_list").click(function(){
         $(this).siblings().removeClass('active_chat');

@@ -32,7 +32,7 @@
                 </div>
                 <div class="inbox_chat">
                     @foreach(\App\Models\User::all()->except(\Illuminate\Support\Facades\Auth::id()) as $user)
-                        <div class="chat_list" data-id="{{ $user->id }}">
+                        <div class="chat_list" data-id="{{ $user->id }}" data-my_id="{{ \Illuminate\Support\Facades\Auth::id() }}">
                             <div class="chat_people">
                                 <div class="chat_img">
                                     <img src="https://static.thenounproject.com/png/862013-200.png" alt="img loading error">
@@ -67,7 +67,7 @@
                                     <img src="https://cdn.iconscout.com/icon/premium/png-256-thumb/chat-room-3-1058983.png" alt="img loading error">
                                 </div>
                                 <div class="chat_ib">
-                                    <h5>General room<span class="chat_date">Dec 25</span></h5>
+                                    <h5>General room {{ $i + 1 }}<span class="chat_date">Dec 25</span></h5>
                                     <p>aaa@gmail.com</p>
                                 </div>
                             </div>

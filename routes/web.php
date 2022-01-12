@@ -24,6 +24,7 @@ Route::get('/dashboard', function () {
     return view('dashboard', ['users' => $users]);
 })->middleware(['auth'])->name('dashboard');
 
-Route::get('/chat/{id}', 'App\Http\Controllers\ChatController@index')->name('chat');
 
 require __DIR__.'/auth.php';
+
+Route::get('/chat/{id}', 'App\Http\Controllers\ChatController@index')->name('chat');

@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\chat;
+use App\Models\chat_user;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ChatController extends Controller
 {
@@ -12,10 +16,18 @@ class ChatController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
-        //
-        return view('dashboard');
+        $result = DB::table('chat_user')
+            ->select('id', 'user_id', 'chat_id')
+            ->where('user_id', $id)
+            ->orWhere('user_id', Auth::id())
+            ->get();
+        return $result;
+//        db query
+//        return query result
+//        return "selected id is -> ".$id.'<br>my id is '.Auth::id();
+//        return view('dashboard');
     }
 
     /**

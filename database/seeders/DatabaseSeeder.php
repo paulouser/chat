@@ -16,29 +16,31 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        for ($i = 0; $i < 3; ++$i) {
-            DB::table('users')->insert([
-                'name' => Str::random(10),
-                'email' => Str::random(10) . '@gmail.com',
-                'password' => Hash::make('password'),
-            ]);
+        for ($i = 1; $i < 3; ++$i) {
+//            DB::table('users')->insert([
+//                'name' => Str::random(10),
+//                'email' => Str::random(10) . '@gmail.com',
+//                'password' => Hash::make('password'),
+//            ]);
 
-            DB::table('chats')->insert([
-                'name' => Str::random(10),
-                'type' => true,
-            ]);
+//            DB::table('chats')->insert([
+//                'id' => $i,
+//                'name' => 'chat_name'.$i,
+//                'type' => true,
+//            ]);
 
-            DB::table('chat_user')->insert([
-                'user_id' => 1,
-                'chat_id' => 1,
-                'created_at' => date("Y-m-d H:i:s"),
-            ]);
+//            DB::table('chat_user')->insert([
+//                "id" => $i,
+//                'user_id' => $i,
+//                'chat_id' => $i,
+//                'created_at' => date("Y-m-d H:i:s"),
+//            ]);
 
-            DB::table('messages')->insert([
-                'chat_user_id' => 1,
-                'message' => 'Hello world!',
-                'created_at' => date("Y-m-d H:i:s"),
-            ]);
+//            DB::table('messages')->insert([
+//                'chat_user_id' => 1,
+//                'message' => 'Hello user ',
+//                'created_at' => date("Y-m-d H:i:s"),
+//            ]);
         }
 
         // \App\Models\User::factory(10)->create();
