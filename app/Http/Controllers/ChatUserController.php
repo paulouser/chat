@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\message;
+//use App\Models\message;
 use Illuminate\Http\Request;
 
 class ChatUserController extends Controller

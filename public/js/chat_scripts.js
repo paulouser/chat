@@ -4,20 +4,22 @@ $(document).ready(function(){
     });
 
     $("button.plus-button--small").click(function(){
-        $(".chat_date").toggle('fast');
+        $(".chat_date").fadeToggle('slow');
     });
 
     $('.chat_list').click(function() {
         console.log($(this).data("id"))
     });
 
-    // $("p").click(function(){
-    //     $(this).hide(1000);
-    // });
-
-    $("img").dblclick(function(){
-        $(this).toggle('slow');
+    $(".chat_list").click(function(){
+        $(this).siblings().removeClass('active_chat');
+        $(this).addClass('active_chat');
     });
+
+
+    // $("img").dblclick(function(){
+    //     $(this).toggle('slow');
+    // });
 
     // $(".chat_date").mouseenter(function(){
     //     alert("You entered chat_date!");
