@@ -9,6 +9,8 @@ class chat_user extends Model
 {
     use HasFactory;
 
+//    protected $table = 'chat_user';
+
     public function messages()
     {
         return $this->hasMany(message::class);

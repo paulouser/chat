@@ -10,15 +10,14 @@ $(document).ready(function(){
     $('.chat_list').click(function() {
         $.ajax({
             url: "/chat/" + $(this).data("id"),
+
             success: function (data){
                 $(".msg_history").empty();
                 let ch = '';
                 for(let d of data) {
-                    ch += '<button>' + d.id + '</button>';
-                    console.log(d)
+                    ch += '<button>' + d.message + '</button><br>';
                 }
                 $(".msg_history").html(ch);
-                console.log('success', data)
             }
         });
 

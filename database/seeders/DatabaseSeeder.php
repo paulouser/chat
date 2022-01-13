@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\chat_user;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -16,7 +17,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        for ($i = 1; $i < 3; ++$i) {
+//        for ($i = 1; $i < 3; ++$i) {
 //            DB::table('users')->insert([
 //                'name' => Str::random(10),
 //                'email' => Str::random(10) . '@gmail.com',
@@ -30,19 +31,21 @@ class DatabaseSeeder extends Seeder
 //            ]);
 
 //            DB::table('chat_user')->insert([
-//                "id" => $i,
-//                'user_id' => $i,
-//                'chat_id' => $i,
+//                "id" => 9,
+//                'user_id' => 4,
+//                'chat_id' => 3,
 //                'created_at' => date("Y-m-d H:i:s"),
 //            ]);
 
+//        DB::table('chat_user')->where('id', 3)->update(['type' => false]);
+//        DB::table('messages')->delete(3);
 //            DB::table('messages')->insert([
-//                'chat_user_id' => 1,
-//                'message' => 'Hello user ',
+//                'chat_user_id' => 2,
+//                'message' => 'Hello from 1 to 5',
 //                'created_at' => date("Y-m-d H:i:s"),
 //            ]);
         }
 
         // \App\Models\User::factory(10)->create();
-    }
+//    }
 }
