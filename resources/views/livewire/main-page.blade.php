@@ -10,6 +10,7 @@
     <script src="../../js/chat_scripts.js"></script>
     <script>localStorage.setItem("my_id", "{{ \Illuminate\Support\Facades\Auth::id() }}");</script>
 </head>
+
 <body>
 <div class="container">
     <h3 class="text-center">Chat history</h3>
@@ -39,9 +40,7 @@
                                     <img src="https://static.thenounproject.com/png/862013-200.png" alt="img loading error">
                                 </div>
                                 <div class="chat_ib">
-                                    <h5>{{ $user->name }}
-                                        <span class="chat_date">Dec 25</span>
-                                    </h5>
+                                    <h5>{{ $user->name }}</h5>
                                     <p>{{ $user->email }}</p>
                                 </div>
                             </div>
@@ -51,7 +50,7 @@
                     <div class="headind_srch">
                         <div class="recent_heading">
                             <h4>Rooms
-                                <button class="plus-button plus-button--small"></button>
+                                <button class="plus-button"></button>
                             </h4>
                         </div>
                         <div class="srch_bar">
@@ -78,34 +77,6 @@
             </div>
             <div class="mesgs">
                 <div class="msg_history">
-{{--                    <div class="incoming_msg">--}}
-{{--                        <div class="incoming_msg_img">--}}
-{{--                            <img src="https://static.thenounproject.com/png/862013-200.png" alt="img loading error">--}}
-{{--                        </div>--}}
-{{--                        <div class="received_msg">--}}
-{{--                            <div class="received_withd_msg">--}}
-{{--                                <p></p>--}}
-{{--                                <span class="time_date"> </span>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                    <div class="outgoing_msg">--}}
-{{--                        <div class="sent_msg">--}}
-{{--                            <p></p>--}}
-{{--                            <span class="time_date"> </span>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                    <div class="incoming_msg">--}}
-{{--                        <div class="incoming_msg_img">--}}
-{{--                            <img src="https://static.thenounproject.com/png/862013-200.png" alt="img loading error">--}}
-{{--                        </div>--}}
-{{--                        <div class="received_msg">--}}
-{{--                            <div class="received_withd_msg">--}}
-{{--                                <p></p>--}}
-{{--                                <span class="time_date"> </span>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
                 </div>
                 <div class="type_msg">
                     <div class="input_msg_write">

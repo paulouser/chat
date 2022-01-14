@@ -41,7 +41,7 @@ class DatabaseSeeder extends Seeder
 //        DB::table('messages')->delete(3);
 //            DB::table('messages')->insert([
 //                'chat_user_id' => 2,
-//                'message' => 'How are you? from 1 to 5',
+//                'message' => 'The same to you. Bye bye :))) from 1 to 5',
 //                'created_at' => date("Y-m-d H:i:s"),
 //            ]);
 

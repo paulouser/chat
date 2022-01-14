@@ -1,12 +1,4 @@
 $(document).ready(function(){
-    $("img").click(function(){
-        $("p").toggle('slow');
-    });
-
-    $("button.plus-button--small").click(function(){
-        $(".chat_date").fadeToggle('slow');
-    });
-
     function generateMessage(myId, data) {
         let msgType = data.user_id == myId ? "outgoing_msg" : "incomming_msg";
         let img = "https://static.thenounproject.com/png/862013-200.png";
@@ -21,9 +13,12 @@ $(document).ready(function(){
     }
 
     $('.chat_list').click(function() {
+        $(this).siblings().removeClass('active_chat');
+        $(this).addClass('active_chat');
         $.ajax({
             url: "/chat/" + $(this).data("id"),
             success: function (data) {
+                localStorage.setItem("clicked_id",  $(this).data("id"));
                 let myId = localStorage.getItem("my_id");
                 $(".msg_history").empty();
 
@@ -35,19 +30,4 @@ $(document).ready(function(){
             }
         });
     });
-
-
-    $(".chat_list").click(function(){
-        $(this).siblings().removeClass('active_chat');
-        $(this).addClass('active_chat');
-    });
-
-
-    // $("img").dblclick(function(){
-    //     $(this).toggle('slow');
-    // });
-
-    // $(".chat_date").mouseenter(function(){
-    //     alert("You entered chat_date!");
-    // });
 });
