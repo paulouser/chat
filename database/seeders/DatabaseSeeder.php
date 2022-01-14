@@ -41,11 +41,17 @@ class DatabaseSeeder extends Seeder
 //        DB::table('messages')->delete(3);
 //            DB::table('messages')->insert([
 //                'chat_user_id' => 2,
-//                'message' => 'Hello from 1 to 5',
+//                'message' => 'How are you? from 1 to 5',
 //                'created_at' => date("Y-m-d H:i:s"),
 //            ]);
-        }
 
+
+//        DB::table('messages')->where('id', 5)->update(
+//            [
+//            'created_at' => \Carbon\Carbon::now()->toDateTimeString(),
+//            'updated_at' => \Carbon\Carbon::now()->toDateTimeString(),
+//            ]);
+        }
         // \App\Models\User::factory(10)->create();
 //    }
 }

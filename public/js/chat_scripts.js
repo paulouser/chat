@@ -7,23 +7,33 @@ $(document).ready(function(){
         $(".chat_date").fadeToggle('slow');
     });
 
+    function generateMessage(myId, data) {
+        let msgType = data.user_id == myId ? "outgoing_msg" : "incomming_msg";
+        let img = "https://static.thenounproject.com/png/862013-200.png";
+        let msg = $("<div>", {class: "message"});
+        msg.append($("<div>", {class: msgType})
+            .append($("<div>", {class: "message_img"})
+                .append($("<img>", {src: img, alt: "Error"})))
+            .append($("<div>", {class: "message_body"})
+                .append($("<p>", {class: "message_text"}).text(data.message))
+                .append($("<span>", {class: "message_time"}).text(data.created_at))));
+        return msg;
+    }
+
     $('.chat_list').click(function() {
         $.ajax({
             url: "/chat/" + $(this).data("id"),
-
-            success: function (data){
+            success: function (data) {
+                let myId = localStorage.getItem("my_id");
                 $(".msg_history").empty();
-                let ch = '';
+
                 for(let d of data) {
-                    ch += '<button>' + d.message + '</button><br>';
+                    $(".msg_history").append(
+                        generateMessage(myId, d)
+                    )
                 }
-                $(".msg_history").html(ch);
             }
         });
-
-
-        // console.log($(this).data("id"));
-        // $(this).data("my_id", $(this).data("my_id"));
     });
 
 

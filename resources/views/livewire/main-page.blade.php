@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../../css/chat_style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="../../js/chat_scripts.js"></script>
+    <script>localStorage.setItem("my_id", "{{ \Illuminate\Support\Facades\Auth::id() }}");</script>
 </head>
 <body>
 <div class="container">
@@ -77,51 +78,34 @@
             </div>
             <div class="mesgs">
                 <div class="msg_history">
-                    <div class="incoming_msg">
-                        <div class="incoming_msg_img">
-                            <img src="https://static.thenounproject.com/png/862013-200.png" alt="img loading error">
-                        </div>
-                        <div class="received_msg">
-                            <div class="received_withd_msg">
-                                <p>Lorem ipsum<br>Lorem ipsum</p>
-                                <span class="time_date"> 11:01 AM    |    June 9</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="outgoing_msg">
-                        <div class="sent_msg">
-                            <p>Lorem ipsum<br>Lorem ipsum</p>
-                            <span class="time_date"> 11:01 AM    |    June 9</span>
-                        </div>
-                    </div>
-                    <div class="incoming_msg">
-                        <div class="incoming_msg_img">
-                            <img src="https://static.thenounproject.com/png/862013-200.png" alt="img loading error">
-                        </div>
-                        <div class="received_msg">
-                            <div class="received_withd_msg">
-                                <p>Lorem ipsum</p>
-                                <span class="time_date"> 11:01 AM    |    Yesterday</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="outgoing_msg">
-                        <div class="sent_msg">
-                            <p>Lorem ipsum</p>
-                            <span class="time_date"> 11:01 AM    |    Today</span>
-                        </div>
-                    </div>
-                    <div class="incoming_msg">
-                        <div class="incoming_msg_img">
-                            <img src="https://static.thenounproject.com/png/862013-200.png" alt="img loading error">
-                        </div>
-                        <div class="received_msg">
-                            <div class="received_withd_msg">
-                                <p>Lorem ipsum<br>Lorem ipsum</p>
-                                <span class="time_date"> 11:01 AM    |    Today</span>
-                            </div>
-                        </div>
-                    </div>
+{{--                    <div class="incoming_msg">--}}
+{{--                        <div class="incoming_msg_img">--}}
+{{--                            <img src="https://static.thenounproject.com/png/862013-200.png" alt="img loading error">--}}
+{{--                        </div>--}}
+{{--                        <div class="received_msg">--}}
+{{--                            <div class="received_withd_msg">--}}
+{{--                                <p></p>--}}
+{{--                                <span class="time_date"> </span>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="outgoing_msg">--}}
+{{--                        <div class="sent_msg">--}}
+{{--                            <p></p>--}}
+{{--                            <span class="time_date"> </span>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="incoming_msg">--}}
+{{--                        <div class="incoming_msg_img">--}}
+{{--                            <img src="https://static.thenounproject.com/png/862013-200.png" alt="img loading error">--}}
+{{--                        </div>--}}
+{{--                        <div class="received_msg">--}}
+{{--                            <div class="received_withd_msg">--}}
+{{--                                <p></p>--}}
+{{--                                <span class="time_date"> </span>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
                 </div>
                 <div class="type_msg">
                     <div class="input_msg_write">
