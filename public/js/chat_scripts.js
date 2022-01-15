@@ -1,4 +1,11 @@
 $(document).ready(function(){
+    // bind the message send button to enter key
+    $('.type_msg').keypress(function(e){
+        if (e.which === 13){
+            $(".msg_send_btn").click();
+        }
+    });
+
     function generateMessage(myId, data) {
         let msgType = data.user_id == myId ? "outgoing_msg" : "incomming_msg";
         let img = "https://static.thenounproject.com/png/862013-200.png";
@@ -45,8 +52,10 @@ $(document).ready(function(){
             url: "/messages/" + localStorage.getItem("your_id") + '/' + $('.write_msg').val(),
             success: function (data) {
                 if (data === 'emtpy_message'){
-                    alert('dddddddddddddd')
+                    alert('empty text')
                     return;
+                }else if (data.length === 0){
+                    alert('you enter delete, \nall chat history deleted from server\noops!')
                 }
                 let myId = localStorage.getItem("my_id");
                 $(".msg_history").empty();

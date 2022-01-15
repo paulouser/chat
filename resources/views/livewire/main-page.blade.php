@@ -85,7 +85,7 @@
                 <div class="type_msg">
                     <div class="input_msg_write">
                         <input type="text" class="write_msg" placeholder="Type a message" readonly />
-                        <button class="msg_send_btn" type="button">
+                        <button class="msg_send_btn" type="button" id="send_message">
                             <img src="https://upload.wikimedia.org/wikipedia/commons/0/0c/Message_%28Send%29.png" width="28px">
                         </button>
                     </div>
