@@ -15,17 +15,50 @@ $(document).ready(function(){
     $('.chat_list').click(function() {
         $(this).siblings().removeClass('active_chat');
         $(this).addClass('active_chat');
+        localStorage.setItem('your_id', $(this).data('id'));
+
         $.ajax({
             url: "/chat/" + $(this).data("id"),
             success: function (data) {
                 localStorage.setItem("clicked_id",  $(this).data("id"));
                 let myId = localStorage.getItem("my_id");
-                $(".msg_history").empty();
 
-                for(let d of data) {
-                    $(".msg_history").append(
-                        generateMessage(myId, d)
-                    )
+                $(".msg_history").empty();
+                $(".write_msg").val('');
+                $(".write_msg").attr("readonly", false);
+
+                if (data.length !== 0){
+                    for(let d of data) {
+                        $(".msg_history").append(
+                            generateMessage(myId, d)
+                        )
+                    }
+                }
+            }
+        });
+    });
+
+    $('.msg_send_btn').click(function() {
+        // alert($('.write_msg').val());
+
+        $.ajax({
+            url: "/messages/" + localStorage.getItem("your_id") + '/' + $('.write_msg').val(),
+            success: function (data) {
+                if (data === 'emtpy_message'){
+                    alert('dddddddddddddd')
+                    return;
+                }
+                let myId = localStorage.getItem("my_id");
+                $(".msg_history").empty();
+                $(".write_msg").val('');
+                $(".write_msg").attr("readonly", false);
+
+                if (data.length !== 0){
+                    for(let d of data) {
+                        $(".msg_history").append(
+                            generateMessage(myId, d)
+                        )
+                    }
                 }
             }
         });

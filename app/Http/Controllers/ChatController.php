@@ -6,6 +6,7 @@ use App\Models\chat;
 use App\Models\chat_user;
 use App\Models\message;
 use App\Models\User;
+use App\Providers\FunctionsServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -21,6 +22,8 @@ class ChatController extends Controller
      */
     public function index($id)
     {
+//        $chatId = !empty((new \App\Providers\FunctionsServiceProvider:getC   ($id)) ? getChatId($id) : createChat($id);
+//        return getChatMessages($chatId)
         $result = DB::table('chats as ch')
             ->join('chat_user as cu1', 'ch.id', '=', 'cu1.chat_id')
             ->leftJoin('chat_user as cu2', 'cu1.chat_id', '=', 'cu2.chat_id')
@@ -56,14 +59,6 @@ class ChatController extends Controller
             ->select('m.*', 'cu.id', 'cu.user_id', 'cu.chat_id')
             ->orderBy('m.created_at')
             ->get();
-
-        // clear the message history
-        // when loading messages incoming and outcoming will shown
-
-        // if auth:user typing the message then
-        // add the message with auth:id in message table
-        // after empty message history and load again
-
 }
 
     /**

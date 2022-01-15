@@ -28,3 +28,8 @@ Route::get('/dashboard', function () {
 require __DIR__ . '/auth.php';
 
 Route::get('/chat/{id}', 'App\Http\Controllers\ChatController@index')->name('chat');
+
+Route::get('/messages/{id}/{msg?}', 'App\Http\Controllers\MessageController@index')
+    ->name('message')
+    ->where('id', '[0-9]+');
+

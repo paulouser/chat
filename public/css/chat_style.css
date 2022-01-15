@@ -9,14 +9,14 @@ img {
 
 .inbox_people {
     background: #f8f8f8 none repeat scroll 0 0;
-    float: right;
+    float: left;
     overflow: hidden;
     width: 40%;
-    border-left: 1px solid #c4c4c4;
+    border-right: 1px solid #c4c4c4;
 }
 
 .inbox_msg {
-    border: 1px solid #c4c4c4;
+    border: 3px solid lightgrey;
     clear: both;
     overflow: hidden;
 }
@@ -32,7 +32,7 @@ img {
     width: 60%;
 }
 
-.headind_srch {
+.heading_srch {
     padding: 10px 29px 10px 20px;
     overflow: hidden;
     border-bottom: 1px solid #c4c4c4;
@@ -132,7 +132,7 @@ img {
 
 .mesgs {
     float: left;
-    padding: 25px 15px 0 25px;
+    padding: 30px 15px 0 25px;
     width: 60%;
 }
 
@@ -181,7 +181,6 @@ img {
 .msg_history {
     height: 516px;
     overflow-y: auto;
-    font-size: 18px;
 }
 
 
@@ -223,3 +222,4 @@ img {
 .plus-button:active {
     background-color: lightskyblue;
 }
+
