@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
 //                'email' => Str::random(10) . '@gmail.com',
 //                'password' => Hash::make('password'),
 //            ]);
-//
+//\
 //            DB::table('chats')->insert([
 //                'id' => 12,
 //                'name' => 'second_room_chat',
@@ -38,12 +38,12 @@ class DatabaseSeeder extends Seeder
 //            ]);
 
 //        DB::table('chat_user')->where('id', 3)->update(['type' => false]);
-//        DB::table('messages')->delete(3);
-//            DB::table('messages')->insert([
-//                'chat_user_id' => 2,
-//                'message' => 'The same to you. Bye bye :))) from 1 to 5',
-//                'created_at' => date("Y-m-d H:i:s"),
-//            ]);
+//        DB::table('chats')->where('type', false)->delete();
+            DB::table('messages')->insert([
+                'chat_user_id' => 167,
+                'message' => '5555555555555555555',
+                'created_at' => date("Y-m-d H:i:s"),
+            ]);
 
 
 //        DB::table('messages')->where('id', 5)->update(

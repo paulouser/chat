@@ -6,7 +6,29 @@ $(document).ready(function(){
         }
     });
 
-    function generateMessage(myId, data) {
+    $('.room_list').click(function() {
+
+        $(this).siblings().removeClass('active_chat');
+        $(this).addClass('active_chat');
+        $(".msg_history").empty();
+    })
+
+    function generateNewRoom(room_name) {
+        let img = "https://cdn.iconscout.com/icon/premium/png-256-thumb/chat-room-3-1058983.png";
+        let room = $("<div>", { class: "room_list"});
+
+        room.append($("<div>", {class: "chat_people"})
+            .append($("<div>", {class: "chat_img"})
+                .append($("<img>", {src: img, alt: "Error"})))
+            .append($("<div>", {class: "chat_ib"})
+                .append($("<h5>", {class: "chat_name"}).text(room_name)
+                    .append($("<span>", {class: "chat_date"}).text("Dec 25")))));
+        return room;
+    }
+
+
+
+    function generateMessage(myId=null, data) {
         let msgType = data.user_id == myId ? "outgoing_msg" : "incomming_msg";
         let img = "https://static.thenounproject.com/png/862013-200.png";
         let msg = $("<div>", {class: "message"});
@@ -64,6 +86,30 @@ $(document).ready(function(){
                                 generateMessage(myId, d)
                             )
                         }
+                    }
+                }
+            }
+        });
+    });
+
+
+    $('.plus-button').click(function() {
+        var chat_name = prompt("Please enter chat name");
+
+        $.ajax({
+            url: "/chat_user/" + chat_name,
+            success: function (data) {
+                $(".msg_history").empty();
+                $(".write_msg").val('').attr('readonly', false);
+
+                $("#rooms_part").append(
+                    generateNewRoom()
+                )
+                if (data.length !== 0) {
+                    for (let d of data) {
+                        $(".msg_history").append(
+                            generateMessage(data)
+                        )
                     }
                 }
             }
