@@ -23,11 +23,11 @@ class DatabaseSeeder extends Seeder
 //                'email' => Str::random(10) . '@gmail.com',
 //                'password' => Hash::make('password'),
 //            ]);
-
+//
 //            DB::table('chats')->insert([
-//                'id' => $i,
-//                'name' => 'chat_name'.$i,
-//                'type' => true,
+//                'id' => 12,
+//                'name' => 'second_room_chat',
+//                'type' => false,
 //            ]);
 
 //            DB::table('chat_user')->insert([

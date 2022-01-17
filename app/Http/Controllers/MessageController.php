@@ -10,6 +10,57 @@ use Illuminate\Support\Facades\DB;
 
 class MessageController extends Controller
 {
+    public function getChatMessages($chatId){
+        return DB::table('messages as m')
+            ->leftJoin('chat_user as cu', 'm.chat_user_id', '=', 'cu.id')
+            ->where('cu.chat_id', '=', $chatId)
+            ->select('m.*', 'cu.id', 'cu.user_id', 'cu.chat_id')
+            ->orderBy('m.created_at')
+            ->get();
+    }
+
+
+    public function  insert_message($chat_user_id, $msg){
+        DB::table('messages')->insert([
+            'chat_user_id' => $chat_user_id,
+            'message' => $msg,
+            'created_at' => date("Y-m-d H:i:s"),
+        ]);
+    }
+
+
+    public  function take_chat_user_id($chat_id){
+        return DB::table('chat_user as cu')
+            ->where('cu.chat_id', '=', $chat_id)
+            ->where('cu.user_id', '=', Auth::user()->id)
+            ->select('id as chat_user_id')
+            ->first()->chat_user_id;
+    }
+
+
+    public function  delete_chat_history($chat_id){
+        DB::table('messages as m')
+            ->leftJoin('chat_user as cu', 'm.chat_user_id', '=', 'cu.id')
+            ->where('cu.chat_id', '=', $chat_id)
+            ->select('m.*', 'cu.id', 'cu.user_id', 'cu.chat_id')
+            ->orderBy('m.created_at')
+            ->delete();
+    }
+
+
+    public function get_matched_chat_id($id){
+        return DB::table('chats as ch')
+            ->join('chat_user as cu1', 'ch.id', '=', 'cu1.chat_id')
+            ->leftJoin('chat_user as cu2', 'cu1.chat_id', '=', 'cu2.chat_id')
+            ->where('ch.type', '=', true)
+            ->where('cu1.user_id', '=', Auth::user()->id)
+            ->where('cu2.user_id', '=', $id)
+            ->select('cu1.chat_id as chat_id')
+            ->first()->chat_id;
+    }
+
+
+
     /**
      * Display a listing of the resource.
      *
@@ -18,49 +69,19 @@ class MessageController extends Controller
     public function index($id, $msg = null)
     {
         if (empty($msg)){
-            return 'emtpy_message';
+            return 'emtpy';
         }
 
-        $get_matched_chat_id = DB::table('chats as ch')
-            ->join('chat_user as cu1', 'ch.id', '=', 'cu1.chat_id')
-            ->leftJoin('chat_user as cu2', 'cu1.chat_id', '=', 'cu2.chat_id')
-            ->where('ch.type', '=', true)
-            ->where('cu1.user_id', '=', Auth::user()->id)
-            ->where('cu2.user_id', '=', $id)
-            ->select('cu1.chat_id as chat_id')
-            ->first();
-
-        $chat_id = $get_matched_chat_id->chat_id;
+        $chatId = $this->get_matched_chat_id($id);
 
         if ($msg == "delete"){
-            DB::table('messages as m')
-                ->leftJoin('chat_user as cu', 'm.chat_user_id', '=', 'cu.id')
-                ->where('cu.chat_id', '=', $chat_id)
-                ->select('m.*', 'cu.id', 'cu.user_id', 'cu.chat_id')
-                ->orderBy('m.created_at')
-                ->delete();
+            $this->delete_chat_history($chatId);
         } else{
-            $chat_user_id = DB::table('chat_user as cu')
-                ->where('cu.chat_id', '=', $chat_id)
-                ->where('cu.user_id', '=', Auth::user()->id)
-                ->select('id as chat_user_id')
-                ->first();
-
-            DB::table('messages')->insert([
-                'chat_user_id' => $chat_user_id->chat_user_id,
-                'message' => $msg,
-                'created_at' => date("Y-m-d H:i:s"),
-            ]);
+            $chat_user_id = $this->take_chat_user_id($chatId);
+            $this->insert_message($chat_user_id, $msg);
         }
 
-
-        // getChatMessages($chatId)
-        return DB::table('messages as m')
-            ->leftJoin('chat_user as cu', 'm.chat_user_id', '=', 'cu.id')
-            ->where('cu.chat_id', '=', $chat_id)
-            ->select('m.*', 'cu.id', 'cu.user_id', 'cu.chat_id')
-            ->orderBy('m.created_at')
-            ->get();
+        return $this->getChatMessages($chatId);
     }
 
     /**

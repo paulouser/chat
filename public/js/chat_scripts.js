@@ -31,8 +31,7 @@ $(document).ready(function(){
                 let myId = localStorage.getItem("my_id");
 
                 $(".msg_history").empty();
-                $(".write_msg").val('');
-                $(".write_msg").attr("readonly", false);
+                $(".write_msg").val('').attr('readonly', false);
 
                 if (data.length !== 0){
                     for(let d of data) {
@@ -46,27 +45,25 @@ $(document).ready(function(){
     });
 
     $('.msg_send_btn').click(function() {
-        // alert($('.write_msg').val());
-
         $.ajax({
             url: "/messages/" + localStorage.getItem("your_id") + '/' + $('.write_msg').val(),
             success: function (data) {
-                if (data === 'emtpy_message'){
-                    alert('empty text')
-                    return;
-                }else if (data.length === 0){
-                    alert('you enter delete, \nall chat history deleted from server\noops!')
-                }
                 let myId = localStorage.getItem("my_id");
-                $(".msg_history").empty();
-                $(".write_msg").val('');
-                $(".write_msg").attr("readonly", false);
 
-                if (data.length !== 0){
-                    for(let d of data) {
-                        $(".msg_history").append(
-                            generateMessage(myId, d)
-                        )
+                if (data === 'emtpy'){
+                    // alert('empty text')
+                    return;
+                } else{
+                    $(".msg_history").empty();
+                    if (data.length === 0){
+                        alert('All chat history deleted from server!')
+                    }else if (data.length !== 0){
+                        $(".write_msg").val('').attr('readonly', false);
+                        for(let d of data) {
+                            $(".msg_history").append(
+                                generateMessage(myId, d)
+                            )
+                        }
                     }
                 }
             }

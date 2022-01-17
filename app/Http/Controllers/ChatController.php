@@ -10,11 +10,52 @@ use App\Providers\FunctionsServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use mysql_xdevapi\Result;
+//use mysql_xdevapi\Result;
 use function PHPUnit\Framework\isEmpty;
 
 class ChatController extends Controller
 {
+    public function getChatMessages($chatId){
+        return DB::table('messages as m')
+            ->leftJoin('chat_user as cu', 'm.chat_user_id', '=', 'cu.id')
+            ->where('cu.chat_id', '=', $chatId)
+            ->select('m.*', 'cu.id', 'cu.user_id', 'cu.chat_id')
+            ->orderBy('m.created_at')
+            ->get();
+    }
+
+
+    public function createChat($id){
+        $chatId = DB::table('chats')->insertGetId([
+            'name' => Auth::user()->name . "'s and " . DB::table('users')->where('id', $id)->pluck('name')->first() . " 's chat",
+            'type' => true
+        ]);
+
+        // create 2 chat_user items (auth:id clicked:id)
+        DB::table('chat_user')->insert([
+            'chat_id' => $chatId,
+            'user_id' => Auth::user()->id,
+        ]);
+        DB::table('chat_user')->insert([
+            'chat_id' => $chatId,
+            'user_id' => $id,
+        ]);
+        return $chatId;
+    }
+
+
+    public function getChatId($id){
+        return DB::table('chats as ch')
+            ->join('chat_user as cu1', 'ch.id', '=', 'cu1.chat_id')
+            ->leftJoin('chat_user as cu2', 'cu1.chat_id', '=', 'cu2.chat_id')
+            ->where('ch.type', '=', true)
+            ->where('cu1.user_id', '=', Auth::user()->id)
+            ->where('cu2.user_id', '=', $id)
+            ->select('cu1.chat_id as chat_id')
+            ->first()->chat_id;
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -22,43 +63,13 @@ class ChatController extends Controller
      */
     public function index($id)
     {
-//        $chatId = !empty((new \App\Providers\FunctionsServiceProvider:getC   ($id)) ? getChatId($id) : createChat($id);
-//        return getChatMessages($chatId)
-        $result = DB::table('chats as ch')
-            ->join('chat_user as cu1', 'ch.id', '=', 'cu1.chat_id')
-            ->leftJoin('chat_user as cu2', 'cu1.chat_id', '=', 'cu2.chat_id')
-            ->where('ch.type', '=', true)
-            ->where('cu1.user_id', '=', Auth::user()->id)
-            ->where('cu2.user_id', '=', $id)
-            ->select('cu1.chat_id as chat_id')
-            ->first();
-
-        if (empty($result)) {
-            // create chat item
-            $chatId = DB::table('chats')->insertGetId([
-                'name' => Auth::user()->name . "'s and " . DB::table('users')->where('id', $id)->pluck('name')->first() . " 's chat",
-                'type' => true
-            ]);
-
-            // create 2 chat_user items (auth:id clicked:id)
-            DB::table('chat_user')->insert([
-                'chat_id' => $chatId,
-                'user_id' => Auth::user()->id,
-            ]);
-            DB::table('chat_user')->insert([
-                'chat_id' => $chatId,
-                'user_id' => $id,
-            ]);
-        } else {
-            $chatId = $result->chat_id;
+        if (!empty($this->getChatId($id))){
+            $chatId = $this->getChatId($id);
+        }else{
+            $chatId = $this->createChat($id);
         }
 
-        return DB::table('messages as m')
-            ->leftJoin('chat_user as cu', 'm.chat_user_id', '=', 'cu.id')
-            ->where('cu.chat_id', '=', $chatId)
-            ->select('m.*', 'cu.id', 'cu.user_id', 'cu.chat_id')
-            ->orderBy('m.created_at')
-            ->get();
+        return $this->getChatMessages($chatId);
 }
 
     /**

@@ -64,26 +64,28 @@
 {{--                            </div>--}}
 {{--                        </div>--}}
                     </div>
-                    @for($i = 0; $i < 3; $i++)
-                        <div class="chat_list" style='overflow: hidden' data-id="{{ $user->id }}">
-                            <div class="chat_people">
-                                <div class="chat_img">
-                                    <img src="https://cdn.iconscout.com/icon/premium/png-256-thumb/chat-room-3-1058983.png" alt="img loading error">
+                        @foreach(\App\Models\chat::all() as $chat)
+                            @if(!$chat->type)
+                                <div class="chat_list" style='overflow: hidden' data-my_id="{{ $chat->id }}">
+                                    <div class="chat_people">
+                                        <div class="chat_img">
+                                            <img src="https://cdn.iconscout.com/icon/premium/png-256-thumb/chat-room-3-1058983.png" alt="img loading error">
+                                        </div>
+                                        <div class="chat_ib">
+                                            <h5>{{ $chat->name }}<span class="chat_date">Dec 25</span></h5>
+                                            <p>{{ $chat->type }}</p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="chat_ib">
-                                    <h5>General room {{ $i + 1 }}<span class="chat_date">Dec 25</span></h5>
-                                    <p>aaa@gmail.com</p>
-                                </div>
-                            </div>
-                        </div>
-                    @endfor
+                            @endif
+                        @endforeach
                 </div>
             </div>
             <div class="mesgs">
                 <div class="msg_history">
                 </div>
                 <div class="type_msg">
-                    <div class="input_msg_write">
+                    <div>
                         <input type="text" class="write_msg" placeholder="Type a message" readonly />
                         <button class="msg_send_btn" type="button" id="send_message">
                             <img src="https://upload.wikimedia.org/wikipedia/commons/0/0c/Message_%28Send%29.png" width="28px">

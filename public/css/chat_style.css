@@ -1,12 +1,15 @@
+/*whole content*/
 .container {
     max-width: 1170px;
     margin: auto;
 }
 
+/*users image*/
 img {
     max-width: 100%;
 }
 
+/*whole users and rooms part*/
 .inbox_people {
     background: #f8f8f8 none repeat scroll 0 0;
     float: left;
@@ -15,6 +18,7 @@ img {
     border-right: 1px solid #c4c4c4;
 }
 
+/*whole messaging part*/
 .inbox_msg {
     border: 3px solid lightgrey;
     clear: both;
@@ -63,39 +67,47 @@ img {
     margin: 0 0 0 -27px;
 }
 
+/*user name and date part*/
 .chat_ib h5 {
     font-size: 15px;
     color: #464646;
     margin: 0 0 8px 0;
 }
 
+
+/*user date*/
 .chat_ib h5 span {
     font-size: 13px;
     float: right;
 }
 
+/*user mail*/
 .chat_ib p {
     font-size: 14px;
     color: #989898;
-    margin: auto
+    margin: auto;
 }
 
+/*user image*/
 .chat_img {
     float: left;
     width: 11%;
 }
 
+/*user without image part*/
 .chat_ib {
     float: left;
     padding: 0 0 0 15px;
     width: 88%;
 }
 
+/*user whole part*/
 .chat_people {
     overflow: hidden;
     clear: both;
 }
 
+/*whole users section list*/
 .chat_list {
     border-bottom: 1px solid #c4c4c4;
     margin: 0;
@@ -107,6 +119,7 @@ img {
     background: lightblue;
 }
 
+/*whole users section*/
 .inbox_chat {
     height: 550px;
     overflow-y: scroll;
@@ -116,7 +129,7 @@ img {
     background-color: lightblue;
 }
 
-
+/*messages background*/
 .message {
     margin-bottom: 20px;
 }
@@ -130,8 +143,14 @@ img {
     font-size: 10px;
 }
 
+/*messaging and type message section and bottom part */
+.messaging {
+    padding: 0 0 50px 0;
+}
+
+/*whole message section with typing part*/
 .mesgs {
-    float: left;
+    float: right;
     padding: 30px 15px 0 25px;
     width: 60%;
 }
@@ -151,8 +170,16 @@ img {
     display: none;
 }
 
+/*typing part*/
+.type_msg {
+    border-top: 1px solid #c4c4c4;
+    border-left: 1px solid #c4c4c4;
+    position: relative;
 
-.input_msg_write input {
+}
+
+/*only input part for typing*/
+.type_msg input {
     background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
     border: medium none;
     color: blue;
@@ -161,11 +188,7 @@ img {
     width: 100%;
 }
 
-.type_msg {
-    border-top: 1px solid #c4c4c4;
-    position: relative;
-}
-
+/*send button*/
 .msg_send_btn {
     cursor: pointer;
     position: absolute;
@@ -174,10 +197,7 @@ img {
     width: 33px;
 }
 
-.messaging {
-    padding: 0 0 50px 0;
-}
-
+/*only messages section*/
 .msg_history {
     height: 516px;
     overflow-y: auto;
@@ -222,4 +242,3 @@ img {
 .plus-button:active {
     background-color: lightskyblue;
 }
-
