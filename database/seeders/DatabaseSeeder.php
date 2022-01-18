@@ -39,11 +39,11 @@ class DatabaseSeeder extends Seeder
 
 //        DB::table('chat_user')->where('id', 3)->update(['type' => false]);
 //        DB::table('chats')->where('type', false)->delete();
-            DB::table('messages')->insert([
-                'chat_user_id' => 167,
-                'message' => '5555555555555555555',
-                'created_at' => date("Y-m-d H:i:s"),
-            ]);
+//            DB::table('messages')->insert([
+//                'chat_user_id' => 203,
+//                'message' => 'new group message for 203 chat_user_id, from 210 chat_id',
+//                'created_at' => date("Y-m-d H:i:s"),
+//            ]);
 
 
 //        DB::table('messages')->where('id', 5)->update(

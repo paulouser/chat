@@ -73,7 +73,7 @@
                                             <img src="https://cdn.iconscout.com/icon/premium/png-256-thumb/chat-room-3-1058983.png" alt="img loading error">
                                         </div>
                                         <div class="chat_ib">
-                                            <h5>{{ $chat->name }}<span class="chat_date">Dec 25</span></h5>
+                                            <h5>{{ $chat->name }}<span class="chat_date">{{ $chat->created_at->format('Y M D') }}</span></h5>
                                         </div>
                                     </div>
                                 </div>

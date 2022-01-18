@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 //use App\Models\message;
+use App\Models\chat;
+use App\Models\chat_user;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -18,17 +20,28 @@ class ChatUserController extends Controller
             ->get();
     }
 
-
     public function createChat($chat_name){
-        $chatId = DB::table('chats')->insertGetId([
-            'name' => $chat_name,
-            'type' => false,
-        ]);
+        if (!empty($chat_name)){
+            $chat = chat::where('name', '=', $chat_name)->first();
+        }else{
+            $chat = 1;
+        }
+        if ($chat === null) {
+            // there are no duplicate name's
+            $chatId = DB::table('chats')->insertGetId([
+                'name' => $chat_name,
+                'type' => false,
+                "created_at" =>  \Carbon\Carbon::now(),
+                "updated_at" => \Carbon\Carbon::now(),
+            ]);
 
-        DB::table('chat_user')->insert([
-            'chat_id' => $chatId,
-            'user_id' => Auth::user()->id,
-        ]);
+            DB::table('chat_user')->insert([
+                'chat_id' => $chatId,
+                'user_id' => Auth::user()->id,
+                "created_at" =>  \Carbon\Carbon::now(),
+                "updated_at" => \Carbon\Carbon::now(),
+            ]);
+        }
     }
 
 
@@ -37,11 +50,9 @@ class ChatUserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($chat_name)
+    public function index($chatId)
     {
-        $this->createChat($chat_name);
-        return $this->getChatMessages();
-
+        $this->getChatMessages($chatId);
     }
 
     /**
@@ -49,9 +60,11 @@ class ChatUserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($chat_name=null)
     {
-        //
+        $this->createChat($chat_name);
+        return DB::table("chats")
+            ->where('type', '=', false)->get();
     }
 
     /**

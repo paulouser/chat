@@ -33,4 +33,6 @@ Route::get('/messages/{id}/{msg?}', 'App\Http\Controllers\MessageController@inde
     ->name('message')
     ->where('id', '[0-9]+');
 
-Route::get('/chat_user/{chat_name}', 'App\Http\Controllers\ChatUserController@index')->name('chat_user');
+Route::get('/chat_user/{chat_name?}', 'App\Http\Controllers\ChatUserController@create')->name('chat_user');
+
+Route::get('/rooms/{chatId}', 'App\Http\Controllers\ChatUserController@index')->name('rooms');
