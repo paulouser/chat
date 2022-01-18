@@ -6,19 +6,6 @@ $(document).ready(function(){
         }
     });
 
-    function generateRoom(chat) {
-        let img = "https://cdn.iconscout.com/icon/premium/png-256-thumb/chat-room-3-1058983.png";
-        let room = $("<div>", { class: "room_list"});
-        room.append($("<div>", {class: "chat_people"})
-            .append($("<div>", {class: "chat_img"})
-                .append($("<img>", {src: img, alt: "Error"})))
-            .append($("<div>", {class: "chat_ib"})
-                .append($("<h5>", {class: "chat_name"}).text(chat.name)
-                    .append($("<span>", {class: "chat_date"}).text(chat.created_at.split(" ")[0])))));
-        return room;
-    }
-
-
     function generateMessage(myId=null, data) {
         let msgType = data.user_id == myId ? "outgoing_msg" : "incomming_msg";
         let img = "https://static.thenounproject.com/png/862013-200.png";
@@ -27,6 +14,7 @@ $(document).ready(function(){
             .append($("<div>", {class: "message_img"})
                 .append($("<img>", {src: img, alt: "Error"})))
             .append($("<div>", {class: "message_body"})
+                .append($("<p>", {class: 'message_writer'}).text('my_chat_user_id: ' + data.chat_user_id))
                 .append($("<p>", {class: "message_text"}).text(data.message))
                 .append($("<span>", {class: "message_time"}).text(data.created_at))));
         return msg;
@@ -113,7 +101,6 @@ $(document).ready(function(){
         }
     });
 
-
     $('.plus-button').click(function() {
         let new_room_name = prompt('Enter new room name!\n');
 
@@ -121,15 +108,10 @@ $(document).ready(function(){
             url: "/chat_user/" + new_room_name,
             success: function (data) {
                 $(".msg_history").empty();
-                $(".write_msg").val('').attr('readonly', false);
-                $("#rooms_part").append(
-                    generateRoom(data),
-                    location.reload(true)
-                )
+                $(".write_msg").val('').attr('readonly', false).append(location.reload(true));
             }
         });
     });
-
 
     $('.room_list').click(function() {
         localStorage.setItem('roomId', $(this).data('chat_id'));
@@ -142,16 +124,16 @@ $(document).ready(function(){
         $(this).addClass('active_messaging');
 
         $(".chat_list").removeClass('active_messaging');
+        $(".write_msg").val('').attr('readonly', true);
 
         $.ajax({
             url: "/rooms/" + roomId,
             success: function (data) {
                 let myId = localStorage.getItem("my_id");
+                $(".write_msg").val('').attr('readonly', false);
                 $(".msg_history").empty();
-                $(".write_msg").val('').attr('readonly', true);
 
                 if (data.length !== 0){
-                    $(".write_msg").val('').attr('readonly', false);
                     for(let d of data) {
                         $(".msg_history").append(
                             generateMessage(myId, d)
@@ -160,5 +142,6 @@ $(document).ready(function(){
                 }
             }
         });
-    })
+    });
+
 });

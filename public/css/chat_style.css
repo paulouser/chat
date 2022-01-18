@@ -220,11 +220,13 @@ img {
     overflow-y: auto;
 }
 
-
 .active_messaging{
-    background-color: red;
+    background-color: lightgreen;
 }
 
+.message_writer{
+    color: red;
+}
 
 .plus-button {
     border: 2px solid lightgrey;

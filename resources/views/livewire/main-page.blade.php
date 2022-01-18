@@ -23,16 +23,16 @@
                     <div class="recent_heading">
                         <h4>Users</h4>
                     </div>
-{{--                    <div class="srch_bar">--}}
-{{--                        <div class="stylish-input-group">--}}
-{{--                            <input type="text" class="search-bar"  placeholder="Search" >--}}
-{{--                            <span class="input-group-addon">--}}
-{{--                                    <button type="button">--}}
-{{--                                        <i class="fa fa-search" aria-hidden="true"></i>--}}
-{{--                                    </button>--}}
-{{--                                </span>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
+                    <div class="srch_bar">
+                        <div class="stylish-input-group">
+                            <input type="text" class="search-bar"  placeholder="Search" >
+                            <span class="input-group-addon">
+                                    <button type="button">
+                                        <i class="fa fa-search" aria-hidden="true"></i>
+                                    </button>
+                                </span>
+                        </div>
+                    </div>
                 </div>
                 <div class="inbox_chat">
                     @foreach(\App\Models\User::all()->except(\Illuminate\Support\Facades\Auth::id()) as $user)
@@ -57,12 +57,12 @@
                                 <button class="plus-button plus-button--small"></button>
                             </h4>
                         </div>
-{{--                        <div class="srch_bar">--}}
-{{--                            <div class="stylish-input-group">--}}
-{{--                                <input type="text" class="search-bar"  placeholder="Search" >--}}
-{{--                                <span class="input-group-addon"></span>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
+                        <div class="srch_bar">
+                            <div class="stylish-input-group">
+                                <input type="text" class="search-bar"  placeholder="Search" >
+                                <span class="input-group-addon"></span>
+                            </div>
+                        </div>
                     </div>
                         <div id="rooms_part">
                         @foreach(\App\Models\chat::all() as $chat)
