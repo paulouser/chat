@@ -89,19 +89,43 @@ $(document).ready(function(){
                 }
             });
         }
+        else if ( $(".room_list").hasClass('active_messaging')){
+            // for rooms messages
+            $.ajax({
+                url: "/room/" + localStorage.getItem("roomId") + '/' + $('.write_msg').val(),
+                success: function (data) {
+                    let myId = localStorage.getItem("my_id");
+
+                    if (data === 'emtpy'){
+                        alert('empty text')
+                        return;
+                    } else if (data.length !== 0){
+                        $(".write_msg").val('').attr('readonly', false);
+                        $(".msg_history").empty();
+                        for(let d of data) {
+                            $(".msg_history").append(
+                                generateMessage(myId, d)
+                            )
+                        }
+                    }
+                }
+            });
+        }
     });
 
 
     $('.plus-button').click(function() {
-        // let chat_name = prompt("Please enter chat name");
-        let chat_name = 'aaaaaaa';
+        let new_room_name = prompt('Enter new room name!\n');
 
         $.ajax({
-            url: "/chat_user/" + chat_name,
-            success: function () {
-                // alert(JSON.stringify(data));
+            url: "/chat_user/" + new_room_name,
+            success: function (data) {
                 $(".msg_history").empty();
                 $(".write_msg").val('').attr('readonly', false);
+                $("#rooms_part").append(
+                    generateRoom(data),
+                    location.reload(true)
+                )
             }
         });
     });
@@ -119,16 +143,15 @@ $(document).ready(function(){
 
         $(".chat_list").removeClass('active_messaging');
 
-        $(".write_msg").val('').attr('readonly', true);
-
         $.ajax({
             url: "/rooms/" + roomId,
             success: function (data) {
                 let myId = localStorage.getItem("my_id");
                 $(".msg_history").empty();
-                $(".write_msg").val('').attr('readonly', false);
+                $(".write_msg").val('').attr('readonly', true);
 
                 if (data.length !== 0){
+                    $(".write_msg").val('').attr('readonly', false);
                     for(let d of data) {
                         $(".msg_history").append(
                             generateMessage(myId, d)

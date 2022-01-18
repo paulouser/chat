@@ -29,10 +29,15 @@ require __DIR__ . '/auth.php';
 
 Route::get('/chat/{id}', 'App\Http\Controllers\ChatController@index')->name('chat');
 
+
 Route::get('/messages/{id}/{msg?}', 'App\Http\Controllers\MessageController@index')
     ->name('message')
     ->where('id', '[0-9]+');
 
+Route::get('/room/{room_id?}/{msg?}', 'App\Http\Controllers\MessageController@create')->name('room');
+
+
 Route::get('/chat_user/{chat_name?}', 'App\Http\Controllers\ChatUserController@create')->name('chat_user');
 
 Route::get('/rooms/{roomId?}', 'App\Http\Controllers\ChatUserController@index')->name('rooms');
+

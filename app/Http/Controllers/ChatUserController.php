@@ -20,6 +20,15 @@ class ChatUserController extends Controller
                 ->get();
     }
 
+    public function addInRoom($roomId){
+        DB::table('chat_user')->insert([
+            'chat_id' => $roomId,
+            'user_id' => Auth::user()->id,
+            "created_at" =>  \Carbon\Carbon::now(),
+            "updated_at" => \Carbon\Carbon::now(),
+        ]);
+    }
+
     public function createRoomChat($chat_name){
         $duplicate_name = chat::where('name', '=', $chat_name)->first();
         if ($duplicate_name == null and !empty($chat_name)){
@@ -31,17 +40,29 @@ class ChatUserController extends Controller
                 "updated_at" => \Carbon\Carbon::now(),
             ]);
         }
+        return $chatId;
     }
 
-    public function addInRoom($roomId){
-        DB::table('chat_user')->insert([
-            'chat_id' => $roomId,
-            'user_id' => Auth::user()->id,
-            "created_at" =>  \Carbon\Carbon::now(),
-            "updated_at" => \Carbon\Carbon::now(),
-        ]);
+    public function isChatExist($chat_name){
+        $existing_chat = DB::table('chats')->where('name', '=', $chat_name)->first();
+        if (empty($existing_chat)){
+            return false;
+        }else{
+            return true;
+        }
     }
 
+    public function isParticipant($roomId){
+        $exist = DB::table('chat_user')
+            ->where('chat_id', '=', $roomId)
+            ->where('user_id', '=', Auth::id())
+            ->first();
+        if (empty($exist)){
+            return false;
+        }else{
+            return true;
+        }
+    }
 
     /**
      * Display a listing of the resource.
@@ -50,18 +71,33 @@ class ChatUserController extends Controller
      */
     public function index($roomId=null)
     {
-        $this->addInRoom($roomId);
-        return $this->getChatMessages($roomId);
+        if ($this->isParticipant($roomId)){
+            return $this->getChatMessages($roomId);
+        }
+        else{
+            $answer = true; // ask the user for joining room yes or no
+            if ($answer){
+                $this->addInRoom($roomId);
+                return $this->getChatMessages($roomId);
+            }
+        }
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|\Illuminate\Http\Response|object
      */
     public function create($chat_name=null)
     {
-        $this->createRoomChat($chat_name);
+        if ($chat_name != null){
+            $is_exist = $this->isChatExist($chat_name);
+            if (!$is_exist){
+                $roomId = $this->createRoomChat($chat_name);
+                $this->addInRoom($roomId);
+            }
+        }
+        return DB::table('chats')->where('id', '=', $roomId)->first();
     }
 
     /**

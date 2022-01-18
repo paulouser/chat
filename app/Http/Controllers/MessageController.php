@@ -87,11 +87,18 @@ class MessageController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Support\Collection
      */
-    public function create()
+    public function create($room_id=null, $msg=null)
     {
-        //
+        if (empty($msg)){
+            return 'emtpy';
+        }
+
+        $chat_user_id = $this->take_chat_user_id($room_id);
+        $this->insert_message($chat_user_id, $msg);
+        return $this->getChatMessages($room_id);
+
     }
 
     /**
