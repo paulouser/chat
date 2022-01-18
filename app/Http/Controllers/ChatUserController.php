@@ -11,22 +11,18 @@ use Illuminate\Support\Facades\DB;
 
 class ChatUserController extends Controller
 {
-    public function getChatMessages($chatId){
-        return DB::table('messages as m')
-            ->leftJoin('chat_user as cu', 'm.chat_user_id', '=', 'cu.id')
-            ->where('cu.chat_id', '=', $chatId)
-            ->select('m.*', 'cu.id', 'cu.user_id', 'cu.chat_id')
-            ->orderBy('m.created_at')
-            ->get();
+    public function getChatMessages($roomId){
+            return DB::table('messages as m')
+                ->leftJoin('chat_user as cu', 'm.chat_user_id', '=', 'cu.id')
+                ->where('cu.chat_id', '=', $roomId)
+                ->select('m.*', 'cu.id', 'cu.user_id', 'cu.chat_id')
+                ->orderBy('m.created_at')
+                ->get();
     }
 
-    public function createChat($chat_name){
-        if (!empty($chat_name)){
-            $chat = chat::where('name', '=', $chat_name)->first();
-        }else{
-            $chat = 1;
-        }
-        if ($chat === null) {
+    public function createRoomChat($chat_name){
+        $duplicate_name = chat::where('name', '=', $chat_name)->first();
+        if ($duplicate_name == null and !empty($chat_name)){
             // there are no duplicate name's
             $chatId = DB::table('chats')->insertGetId([
                 'name' => $chat_name,
@@ -34,25 +30,28 @@ class ChatUserController extends Controller
                 "created_at" =>  \Carbon\Carbon::now(),
                 "updated_at" => \Carbon\Carbon::now(),
             ]);
-
-            DB::table('chat_user')->insert([
-                'chat_id' => $chatId,
-                'user_id' => Auth::user()->id,
-                "created_at" =>  \Carbon\Carbon::now(),
-                "updated_at" => \Carbon\Carbon::now(),
-            ]);
         }
+    }
+
+    public function addInRoom($roomId){
+        DB::table('chat_user')->insert([
+            'chat_id' => $roomId,
+            'user_id' => Auth::user()->id,
+            "created_at" =>  \Carbon\Carbon::now(),
+            "updated_at" => \Carbon\Carbon::now(),
+        ]);
     }
 
 
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Support\Collection
      */
-    public function index($chatId)
+    public function index($roomId=null)
     {
-        $this->getChatMessages($chatId);
+        $this->addInRoom($roomId);
+        return $this->getChatMessages($roomId);
     }
 
     /**
@@ -62,9 +61,7 @@ class ChatUserController extends Controller
      */
     public function create($chat_name=null)
     {
-        $this->createChat($chat_name);
-        return DB::table("chats")
-            ->where('type', '=', false)->get();
+        $this->createRoomChat($chat_name);
     }
 
     /**

@@ -40,8 +40,8 @@ class DatabaseSeeder extends Seeder
 //        DB::table('chat_user')->where('id', 3)->update(['type' => false]);
 //        DB::table('chats')->where('type', false)->delete();
 //            DB::table('messages')->insert([
-//                'chat_user_id' => 203,
-//                'message' => 'new group message for 203 chat_user_id, from 210 chat_id',
+//                'chat_user_id' => 216,
+//                'message' => 'new group message for 216 chat_user_id and  224 chatId',
 //                'created_at' => date("Y-m-d H:i:s"),
 //            ]);
 

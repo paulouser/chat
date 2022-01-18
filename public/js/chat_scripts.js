@@ -7,7 +7,6 @@ $(document).ready(function(){
     });
 
     function generateRoom(chat) {
-        // alert('start');
         let img = "https://cdn.iconscout.com/icon/premium/png-256-thumb/chat-room-3-1058983.png";
         let room = $("<div>", { class: "room_list"});
         room.append($("<div>", {class: "chat_people"})
@@ -16,7 +15,6 @@ $(document).ready(function(){
             .append($("<div>", {class: "chat_ib"})
                 .append($("<h5>", {class: "chat_name"}).text(chat.name)
                     .append($("<span>", {class: "chat_date"}).text(chat.created_at.split(" ")[0])))));
-        // alert('end');
         return room;
     }
 
@@ -35,16 +33,20 @@ $(document).ready(function(){
     }
 
     $('.chat_list').click(function() {
-        $(this).siblings().removeClass('active_chat');
-        $(this).addClass('active_chat');
         localStorage.setItem('your_id', $(this).data('id'));
+
+        $(this).siblings().removeClass('active_chat');
+        $(this).siblings().removeClass('active_messaging');
+
+        $(this).addClass('active_chat');
+        $(this).addClass('active_messaging');
+
+        $('.room_list').removeClass('active_messaging');
 
         $.ajax({
             url: "/chat/" + $(this).data("id"),
             success: function (data) {
-                localStorage.setItem("clicked_id",  $(this).data("id"));
                 let myId = localStorage.getItem("my_id");
-
                 $(".msg_history").empty();
                 $(".write_msg").val('').attr('readonly', false);
 
@@ -60,83 +62,80 @@ $(document).ready(function(){
     });
 
     $('.msg_send_btn').click(function() {
-        $.ajax({
-            url: "/messages/" + localStorage.getItem("your_id") + '/' + $('.write_msg').val(),
-            success: function (data) {
-                let myId = localStorage.getItem("my_id");
 
-                if (data === 'emtpy'){
-                    // alert('empty text')
-                    return;
-                } else{
-                    $(".msg_history").empty();
-                    if (data.length === 0){
-                        alert('All chat history deleted from server!')
-                    }else if (data.length !== 0){
-                        $(".write_msg").val('').attr('readonly', false);
-                        for(let d of data) {
-                            $(".msg_history").append(
-                                generateMessage(myId, d)
-                            )
+        if ( $(".chat_list").hasClass('active_messaging')){
+            // for users chat messages
+            $.ajax({
+                url: "/messages/" + localStorage.getItem("your_id") + '/' + $('.write_msg').val(),
+                success: function (data) {
+                    let myId = localStorage.getItem("my_id");
+
+                    if (data === 'emtpy'){
+                        // alert('empty text')
+                        return;
+                    } else{
+                        $(".msg_history").empty();
+                        if (data.length === 0){
+                            alert('All chat history deleted from server!')
+                        }else if (data.length !== 0){
+                            $(".write_msg").val('').attr('readonly', false);
+                            for(let d of data) {
+                                $(".msg_history").append(
+                                    generateMessage(myId, d)
+                                )
+                            }
                         }
                     }
                 }
-            }
-        });
+            });
+        }
     });
 
 
     $('.plus-button').click(function() {
-        var chat_name = prompt("Please enter chat name");
+        // let chat_name = prompt("Please enter chat name");
+        let chat_name = 'aaaaaaa';
 
         $.ajax({
             url: "/chat_user/" + chat_name,
-            success: function (data) {
+            success: function () {
                 // alert(JSON.stringify(data));
                 $(".msg_history").empty();
                 $(".write_msg").val('').attr('readonly', false);
-                $("#rooms_part").empty();
-
-                if (data.length !== 0) {
-                    for (let d of data) {
-                        $("#rooms_part").append(
-                            generateRoom(d)
-                        )
-                    }
-                }
-
             }
         });
     });
 
 
     $('.room_list').click(function() {
-        let room_id = localStorage.getItem('room_id');
+        localStorage.setItem('roomId', $(this).data('chat_id'));
+        var roomId = localStorage.getItem('roomId');
+
         $(this).siblings().removeClass('active_chat');
+        $(this).siblings().removeClass('active_messaging');
+
         $(this).addClass('active_chat');
-        $(".msg_history").empty();
+        $(this).addClass('active_messaging');
+
+        $(".chat_list").removeClass('active_messaging');
+
         $(".write_msg").val('').attr('readonly', true);
-        let answer = prompt("want to participate this chat? yes/no");
 
-        if (answer === 'yes'){
-            $.ajax({
-                url: "/rooms/" + $(this).data("room_id"),
-                success: function (data) {
-                    localStorage.setItem("clicked_id",  $(this).data("room_id"));
-                    let myId = localStorage.getItem("my_id");
+        $.ajax({
+            url: "/rooms/" + roomId,
+            success: function (data) {
+                let myId = localStorage.getItem("my_id");
+                $(".msg_history").empty();
+                $(".write_msg").val('').attr('readonly', false);
 
-                    $(".msg_history").empty();
-                    $(".write_msg").val('').attr('readonly', false);
-
-                    if (data.length !== 0){
-                        for(let d of data) {
-                            $(".msg_history").append(
-                                generateMessage(myId, d)
-                            )
-                        }
+                if (data.length !== 0){
+                    for(let d of data) {
+                        $(".msg_history").append(
+                            generateMessage(myId, d)
+                        )
                     }
                 }
-            });
-        }
+            }
+        });
     })
 });

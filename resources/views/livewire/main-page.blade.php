@@ -43,7 +43,7 @@
                                 </div>
                                 <div class="chat_ib">
                                     <h5>{{ $user->name }}
-                                        <span class="chat_date">Dec 25</span>
+                                        <span class="chat_date">{{ $user->created_at->format("Y m d") }}</span>
                                     </h5>
                                     <p>{{ $user->email }}</p>
                                 </div>
@@ -67,13 +67,13 @@
                         <div id="rooms_part">
                         @foreach(\App\Models\chat::all() as $chat)
                             @if(!$chat->type)
-                                <div class="room_list" style='overflow: hidden' data-room_id="{{ $chat->id }}">
+                                <div class="room_list" style='overflow: hidden' data-chat_id="{{ $chat->id }}">
                                     <div class="chat_people">
                                         <div class="chat_img">
                                             <img src="https://cdn.iconscout.com/icon/premium/png-256-thumb/chat-room-3-1058983.png" alt="img loading error">
                                         </div>
                                         <div class="chat_ib">
-                                            <h5>{{ $chat->name }}<span class="chat_date">{{ $chat->created_at->format('Y M D') }}</span></h5>
+                                            <h5>{{ $chat->name }}<span class="chat_date">{{ $chat->created_at->format('Y m d') }}</span></h5>
                                         </div>
                                     </div>
                                 </div>
