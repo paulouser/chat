@@ -12,12 +12,13 @@ use Illuminate\Support\Facades\DB;
 class ChatUserController extends Controller
 {
     public function getChatMessages($roomId){
-            return DB::table('messages as m')
-                ->leftJoin('chat_user as cu', 'm.chat_user_id', '=', 'cu.id')
-                ->where('cu.chat_id', '=', $roomId)
-                ->select('m.*', 'cu.id', 'cu.user_id', 'cu.chat_id')
-                ->orderBy('m.created_at')
-                ->get();
+        return DB::table('messages as m')
+            ->leftJoin('chat_user as cu', 'm.chat_user_id', '=', 'cu.id')
+            ->join('users as us', 'cu.user_id', '=', 'us.id')
+            ->where('cu.chat_id', '=', $roomId)
+            ->select('m.message', 'us.name', 'm.created_at', 'us.id as user_id')
+            ->orderBy('m.created_at')
+            ->get();
     }
 
     public function addInRoom($roomId){

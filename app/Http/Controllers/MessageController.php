@@ -13,8 +13,9 @@ class MessageController extends Controller
     public function getChatMessages($chatId){
         return DB::table('messages as m')
             ->leftJoin('chat_user as cu', 'm.chat_user_id', '=', 'cu.id')
+            ->join('users as us', 'cu.user_id', '=', 'us.id')
             ->where('cu.chat_id', '=', $chatId)
-            ->select('m.*', 'cu.id', 'cu.user_id', 'cu.chat_id')
+            ->select('m.message', 'us.name', 'm.created_at', 'us.id as user_id')
             ->orderBy('m.created_at')
             ->get();
     }

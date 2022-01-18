@@ -7,6 +7,7 @@ $(document).ready(function(){
     });
 
     function generateMessage(myId=null, data) {
+        console.log(data.user_id);
         let msgType = data.user_id == myId ? "outgoing_msg" : "incomming_msg";
         let img = "https://static.thenounproject.com/png/862013-200.png";
         let msg = $("<div>", {class: "message"});
@@ -14,7 +15,7 @@ $(document).ready(function(){
             .append($("<div>", {class: "message_img"})
                 .append($("<img>", {src: img, alt: "Error"})))
             .append($("<div>", {class: "message_body"})
-                .append($("<p>", {class: 'message_writer'}).text('my_chat_user_id: ' + data.chat_user_id))
+                .append($("<p>", {class: 'message_writer'}).text(data.name))
                 .append($("<p>", {class: "message_text"}).text(data.message))
                 .append($("<span>", {class: "message_time"}).text(data.created_at))));
         return msg;
@@ -66,12 +67,14 @@ $(document).ready(function(){
                         if (data.length === 0){
                             alert('All chat history deleted from server!')
                         }else if (data.length !== 0){
+                            // alert(JSON.stringify(data));
                             $(".write_msg").val('').attr('readonly', false);
                             for(let d of data) {
                                 $(".msg_history").append(
                                     generateMessage(myId, d)
-                                )
+                                );
                             }
+                            $(".msg_history").animate({scrollTop: $(".msg_history")[0].scrollHeight}, 10);
                         }
                     }
                 }
@@ -94,6 +97,8 @@ $(document).ready(function(){
                             $(".msg_history").append(
                                 generateMessage(myId, d)
                             )
+                            $(".msg_history").animate({scrollTop: $(".msg_history")[0].scrollHeight}, 10);
+
                         }
                     }
                 }
@@ -143,5 +148,4 @@ $(document).ready(function(){
             }
         });
     });
-
 });
