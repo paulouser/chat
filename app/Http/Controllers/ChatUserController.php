@@ -72,16 +72,10 @@ class ChatUserController extends Controller
      */
     public function index($roomId=null)
     {
-        if ($this->isParticipant($roomId)){
-            return $this->getChatMessages($roomId);
+        if (!$this->isParticipant($roomId)){
+            $this->addInRoom($roomId);
         }
-        else{
-            $answer = true; // ask the user for joining room yes or no
-            if ($answer){
-                $this->addInRoom($roomId);
-                return $this->getChatMessages($roomId);
-            }
-        }
+        return $this->getChatMessages($roomId);
     }
 
     /**
@@ -97,8 +91,8 @@ class ChatUserController extends Controller
                 $roomId = $this->createRoomChat($chat_name);
                 $this->addInRoom($roomId);
             }
+            return DB::table('chats')->where('id', '=', $roomId)->first();
         }
-        return DB::table('chats')->where('id', '=', $roomId)->first();
     }
 
     /**

@@ -41,3 +41,4 @@ Route::get('/chat_user/{chat_name?}', 'App\Http\Controllers\ChatUserController@c
 
 Route::get('/rooms/{roomId?}', 'App\Http\Controllers\ChatUserController@index')->name('rooms');
 
+Route::get('/checking/{roomId}', 'App\Http\Controllers\UserController@index')->name('user');

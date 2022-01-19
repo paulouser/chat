@@ -1,4 +1,5 @@
 $(document).ready(function(){
+    $('.btn').hide();
     // bind the message send button to enter key
     $('.type_msg').keypress(function(e){
         if (e.which === 13){
@@ -44,6 +45,7 @@ $(document).ready(function(){
                         $(".msg_history").append(
                             generateMessage(myId, d)
                         )
+                        $(".msg_history").animate({scrollTop: $(".msg_history")[0].scrollHeight}, 10);
                     }
                 }
             }
@@ -60,14 +62,13 @@ $(document).ready(function(){
                     let myId = localStorage.getItem("my_id");
 
                     if (data === 'emtpy'){
-                        // alert('empty text')
+                        console.log('empty text');
                         return;
                     } else{
                         $(".msg_history").empty();
                         if (data.length === 0){
                             alert('All chat history deleted from server!')
                         }else if (data.length !== 0){
-                            // alert(JSON.stringify(data));
                             $(".write_msg").val('').attr('readonly', false);
                             for(let d of data) {
                                 $(".msg_history").append(
@@ -86,9 +87,8 @@ $(document).ready(function(){
                 url: "/room/" + localStorage.getItem("roomId") + '/' + $('.write_msg').val(),
                 success: function (data) {
                     let myId = localStorage.getItem("my_id");
-
                     if (data === 'emtpy'){
-                        alert('empty text')
+                        console.log('empty text');
                         return;
                     } else if (data.length !== 0){
                         $(".write_msg").val('').attr('readonly', false);
@@ -131,20 +131,62 @@ $(document).ready(function(){
         $(".chat_list").removeClass('active_messaging');
         $(".write_msg").val('').attr('readonly', true);
 
+
         $.ajax({
-            url: "/rooms/" + roomId,
+            url: "/checking/" + roomId,
             success: function (data) {
-                let myId = localStorage.getItem("my_id");
-                $(".write_msg").val('').attr('readonly', false);
+                $(".write_msg").val('').attr('readonly', true);
                 $(".msg_history").empty();
 
-                if (data.length !== 0){
-                    for(let d of data) {
-                        $(".msg_history").append(
-                            generateMessage(myId, d)
-                        )
+                if (data['status'] == true){
+                    console.log('already in');
+                    data['status'] = false;
+                    let myId = localStorage.getItem("my_id");
+                    $(".write_msg").val('').attr('readonly', false);
+                    $(".msg_history").empty();
+
+                    console.log(data);
+                    if (data['messages'].length !== 0){
+                        for(let d of data['messages']) {
+                            $(".msg_history").append(
+                                generateMessage(myId, d)
+                            )
+                            $(".msg_history").animate({scrollTop: $(".msg_history")[0].scrollHeight}, 10);
+                        }
                     }
                 }
+                else if (data['status'] == false){
+                    $('.btn').show();
+                    // $('.btn-success').trigger('click');
+                    //
+                    // $('.btn-success').click(function (){
+                    //     $(".write_msg").val('').attr('readonly', false);
+                    //     console.log('accepted');
+                    //     data['status'] = true;
+                    // })
+                }
+                return data;
+            }
+        }).then(function (data){
+            if (data['status'] ==  true){
+                return $.ajax({
+                    url: "/rooms/" + roomId,
+                    success: function (data) {
+                        let myId = localStorage.getItem("my_id");
+                        $(".write_msg").val('').attr('readonly', false);
+                        $(".msg_history").empty();
+
+                        console.log(data[0]);
+                        if (data.length !== 0){
+                            for(let d of data) {
+                                $(".msg_history").append(
+                                    generateMessage(myId, d)
+                                )
+                                $(".msg_history").animate({scrollTop: $(".msg_history")[0].scrollHeight}, 10);
+                            }
+                        }
+                    }
+                })
             }
         });
     });
