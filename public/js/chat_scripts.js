@@ -1,5 +1,4 @@
 $(document).ready(function(){
-    $('.btn').hide();
     // bind the message send button to enter key
     $('.type_msg').keypress(function(e){
         if (e.which === 13){
@@ -9,16 +8,41 @@ $(document).ready(function(){
 
     function generateMessage(myId=null, data) {
         console.log(data.user_id);
-        let msgType = data.user_id == myId ? "outgoing_msg" : "incomming_msg";
-        let img = "https://static.thenounproject.com/png/862013-200.png";
-        let msg = $("<div>", {class: "message"});
-        msg.append($("<div>", {class: msgType})
-            .append($("<div>", {class: "message_img"})
-                .append($("<img>", {src: img, alt: "Error"})))
-            .append($("<div>", {class: "message_body"})
-                .append($("<p>", {class: 'message_writer'}).text(data.name))
-                .append($("<p>", {class: "message_text"}).text(data.message))
-                .append($("<span>", {class: "message_time"}).text(data.created_at))));
+        // let msgType = data.user_id == myId ? "outgoing_msg" : "incomming_msg";
+        let msgType = data.user_id == myId ? "out" : "in";
+        let img = data.img_path;
+        let msg = `
+        <div class="container content">
+        <div class="row">
+         <div class="card">
+          <div class="card-body height3">
+           <ul class="chat-list">
+            <li class=${ msgType }>
+             <div class="chat-img">
+              <img alt="Avtar" src=${ data.img_path }>
+             </div>
+             <div class="chat-body">
+              <div class="chat-message">
+               <h5>${ data.name }</h5>
+               <p>${ data.message }</p>
+               <p>${ data.created_at }</p>
+              </div>
+             </div>
+            </li>
+           </ul>
+          </div>
+         </div>
+    </div>
+</div>`
+
+        // let msg = $("<div>", {class: "message"});
+        // msg.append($("<div>", {class: msgType})
+        //     .append($("<div>", {class: "message_img"})
+        //         .append($("<img>", {src: img, alt: "Error"})))
+        //     .append($("<div>", {class: "message_body"})
+        //         .append($("<p>", {class: 'message_writer'}).text(data.name))
+        //         .append($("<p>", {class: "message_text"}).text(data.message))
+        //         .append($("<span>", {class: "message_time"}).text(data.created_at))));
         return msg;
     }
 
@@ -32,6 +56,8 @@ $(document).ready(function(){
         $(this).addClass('active_messaging');
 
         $('.room_list').removeClass('active_messaging');
+        $(".participate"). css("display", "none");
+
 
         $.ajax({
             url: "/chat/" + $(this).data("id"),
@@ -39,7 +65,9 @@ $(document).ready(function(){
                 let myId = localStorage.getItem("my_id");
                 $(".msg_history").empty();
                 $(".write_msg").val('').attr('readonly', false);
-
+                //
+                // alert(JSON.stringify(data));
+                // console.log(JSON.stringify(data));
                 if (data.length !== 0){
                     for(let d of data) {
                         $(".msg_history").append(
@@ -106,21 +134,75 @@ $(document).ready(function(){
         }
     });
 
-    $('.plus-button').click(function() {
-        let new_room_name = prompt('Enter new room name!\n');
+
+    $('.adding_room').click(function(){
+        $(".msg_history").empty();
+        $(".room_name"). css("display", "block").val('').attr('readonly', false);
+        $(".new_room_name_btn"). css("display", "block").val('').attr('readonly', false);
+    });
+
+    $('.new_room_name_btn').click(function() {
+        let new_room_name = $('.room_name').val();
+        $(".msg_history").empty();
+        $(this). css("display", "none");
+        $(".room_name"). css("display", "none");
+
 
         $.ajax({
-            url: "/chat_user/" + new_room_name,
-            success: function (data) {
-                $(".msg_history").empty();
+            url: "/add_room/" + new_room_name,
+            success: function () {
                 $(".write_msg").val('').attr('readonly', false).append(location.reload(true));
             }
         });
     });
 
+
+    // // generate in place the user in table
+    // let user = {};
+    // let html = `<div className="chat_list" data-id="${user.id}">
+    //     <div className="chat_people">
+    //         <div className="chat_img">
+    //             <img src="${user.img_path}" alt="img loading error">
+    //         </div>
+    //         <div className="chat_ib">
+    //             <h5>${$user.name}
+    //                 <span className="chat_date">${$user.created_at}</span>
+    //             </h5>
+    //             <p>${user.email}</p>
+    //         </div>
+    //     </div>
+    // </div>`;
+
+
+    $('.participate').click(function (){
+        let roomId = localStorage.getItem('roomId');
+        let myId = localStorage.getItem("my_id");
+
+        $(".msg_history").empty();
+        // $(".participate").hide();
+        $(".participate"). css("display", "none");
+
+        // load the messages
+        $.ajax({
+            url: "/getmessages/" + roomId,
+            success: function (data) {
+                $(".write_msg").val('').attr('readonly', false);
+                if (data.length !== 0){
+                    for(let d of data) {
+                        $(".msg_history").append(
+                            generateMessage(myId, d)
+                        )
+                        $(".msg_history").animate({scrollTop: $(".msg_history")[0].scrollHeight}, 10);
+                    }
+                }
+            }
+        })
+    });
+
     $('.room_list').click(function() {
         localStorage.setItem('roomId', $(this).data('chat_id'));
         var roomId = localStorage.getItem('roomId');
+        $(".msg_history").empty();
 
         $(this).siblings().removeClass('active_chat');
         $(this).siblings().removeClass('active_messaging');
@@ -130,22 +212,21 @@ $(document).ready(function(){
 
         $(".chat_list").removeClass('active_messaging');
         $(".write_msg").val('').attr('readonly', true);
+        $(".participate"). css("display", "none");
 
 
         $.ajax({
             url: "/checking/" + roomId,
             success: function (data) {
                 $(".write_msg").val('').attr('readonly', true);
-                $(".msg_history").empty();
 
                 if (data['status'] == true){
                     console.log('already in');
-                    data['status'] = false;
+                    $(".msg_history").empty();
                     let myId = localStorage.getItem("my_id");
                     $(".write_msg").val('').attr('readonly', false);
                     $(".msg_history").empty();
 
-                    console.log(data);
                     if (data['messages'].length !== 0){
                         for(let d of data['messages']) {
                             $(".msg_history").append(
@@ -156,37 +237,8 @@ $(document).ready(function(){
                     }
                 }
                 else if (data['status'] == false){
-                    $('.btn').show();
-                    // $('.btn-success').trigger('click');
-                    //
-                    // $('.btn-success').click(function (){
-                    //     $(".write_msg").val('').attr('readonly', false);
-                    //     console.log('accepted');
-                    //     data['status'] = true;
-                    // })
+                    $(".participate"). css("display", "block");
                 }
-                return data;
-            }
-        }).then(function (data){
-            if (data['status'] ==  true){
-                return $.ajax({
-                    url: "/rooms/" + roomId,
-                    success: function (data) {
-                        let myId = localStorage.getItem("my_id");
-                        $(".write_msg").val('').attr('readonly', false);
-                        $(".msg_history").empty();
-
-                        console.log(data[0]);
-                        if (data.length !== 0){
-                            for(let d of data) {
-                                $(".msg_history").append(
-                                    generateMessage(myId, d)
-                                )
-                                $(".msg_history").animate({scrollTop: $(".msg_history")[0].scrollHeight}, 10);
-                            }
-                        }
-                    }
-                })
             }
         });
     });

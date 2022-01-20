@@ -15,7 +15,7 @@ class UserController extends Controller
             ->leftJoin('chat_user as cu', 'm.chat_user_id', '=', 'cu.id')
             ->join('users as us', 'cu.user_id', '=', 'us.id')
             ->where('cu.chat_id', '=', $roomId)
-            ->select('m.message', 'us.name', 'm.created_at', 'us.id as user_id')
+            ->select('m.message', 'us.name', 'm.created_at', 'us.id as user_id', 'us.img_path')
             ->orderBy('m.created_at')
             ->get();
     }
@@ -34,25 +34,42 @@ class UserController extends Controller
         }
     }
 
+    public function addInRoom($roomId){
+        DB::table('chat_user')->insert([
+            'chat_id' => $roomId,
+            'user_id' => Auth::user()->id,
+            "created_at" =>  \Carbon\Carbon::now(),
+            "updated_at" => \Carbon\Carbon::now(),
+        ]);
+    }
+
 
     /**
      * Display a listing of the resource.
      *
-     * @return array
+     * @return \Illuminate\Support\Collection
      */
     public function index($roomId)
     {
-        return array("messages"=>$this->getChatMessages($roomId), "status"=>$this->is_in_chat($roomId));
+        $this->addInRoom($roomId);
+
+        return $this->getChatMessages($roomId);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return array
      */
-    public function create()
+    public function create($roomId)
     {
-        //
+        $messages = array();
+        $status = false;
+        if ($this->is_in_chat($roomId)){
+            $messages = $this->getChatMessages($roomId);
+            $status = true;
+        }
+        return array("messages" => $messages, "status" => $status);
     }
 
     /**

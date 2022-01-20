@@ -20,7 +20,7 @@ class ChatController extends Controller
             ->leftJoin('chat_user as cu', 'm.chat_user_id', '=', 'cu.id')
             ->join('users as us', 'cu.user_id', '=', 'us.id')
             ->where('cu.chat_id', '=', $chatId)
-            ->select('m.message', 'us.name', 'm.created_at', 'us.id as user_id')
+            ->select('m.message', 'us.name', 'm.created_at', 'us.id as user_id', 'us.img_path')
             ->orderBy('m.created_at')
             ->get();
     }
@@ -36,10 +36,14 @@ class ChatController extends Controller
         DB::table('chat_user')->insert([
             'chat_id' => $chatId,
             'user_id' => Auth::user()->id,
+            "created_at" =>  \Carbon\Carbon::now(),
+            "updated_at" => \Carbon\Carbon::now(),
         ]);
         DB::table('chat_user')->insert([
             'chat_id' => $chatId,
             'user_id' => $id,
+            "created_at" =>  \Carbon\Carbon::now(),
+            "updated_at" => \Carbon\Carbon::now(),
         ]);
         return $chatId;
     }
@@ -50,10 +54,10 @@ class ChatController extends Controller
             ->join('chat_user as cu1', 'ch.id', '=', 'cu1.chat_id')
             ->leftJoin('chat_user as cu2', 'cu1.chat_id', '=', 'cu2.chat_id')
             ->where('ch.type', '=', true)
-            ->where('cu1.user_id', '=', Auth::user()->id)
+            ->where('cu1.user_id', '=', Auth::id())
             ->where('cu2.user_id', '=', $id)
             ->select('cu1.chat_id as chat_id')
-            ->first()->chat_id;
+            ->first();
     }
 
 
@@ -62,10 +66,10 @@ class ChatController extends Controller
      *
      * @return \Illuminate\Support\Collection
      */
-    public function index($id)
+    public function index($id=null)
     {
         if (!empty($this->getChatId($id))){
-            $chatId = $this->getChatId($id);
+            $chatId = $this->getChatId($id)->chat_id;
         }else{
             $chatId = $this->createChat($id);
         }

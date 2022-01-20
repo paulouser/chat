@@ -40,7 +40,7 @@
                         <div class="chat_list" data-id="{{ $user->id }}">
                             <div class="chat_people">
                                 <div class="chat_img">
-                                    <img src="https://static.thenounproject.com/png/862013-200.png" alt="img loading error">
+                                    <img src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="img loading error">
                                 </div>
                                 <div class="chat_ib">
                                     <h5>{{ $user->name }}
@@ -55,7 +55,7 @@
                     <div class="heading_srch">
                         <div class="recent_heading">
                             <h4 >Rooms
-                                <button class="plus-button plus-button--small"></button>
+                                <button class="adding_room plus-button plus-button--small"></button>
                             </h4>
                         </div>
                         <div class="srch_bar">
@@ -83,12 +83,15 @@
                         </div>
                 </div>
             </div>
-            <div class="mesgs">
+                <div class="mesgs">
+                    <button type="button" class=" btn btn-outline-success participate" style="display: none">Participate</button>
+                    <input type="text" class="room_name" placeholder="Enter a new room name!" style="display: none" readonly />
+                    <button type="button" class="btn btn-outline-success new_room_name_btn"  style="display: none" id="new_room_name">Create</button>
+
                 <div class="msg_history">
                 </div>
                 <div class="type_msg">
                     <div>
-                        <button type="button" class="btn btn-success">Participate</button>
 
                         <input type="text" class="write_msg" placeholder="Type a message" readonly />
                         <button class="msg_send_btn" type="button" id="send_message">
