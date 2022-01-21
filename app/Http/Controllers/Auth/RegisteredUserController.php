@@ -45,6 +45,12 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        if (request()->hasFile('img_path')){
+            $img_path = request()->file('img_path')->getClientOriginalName();
+            request()->file('img_path')->storeAs('public/img_paths', $user->id.'/'.$img_path, '');
+            $user->update(['img_path' => $img_path]);
+        }
+
         event(new Registered($user));
 
         Auth::login($user);

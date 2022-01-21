@@ -15,7 +15,7 @@ $(document).ready(function(){
         <ul class="message-list">
           <li class=${ msgType }>
             <div class="message-img">
-              <img alt="Avtar" src="https://bootdey.com/img/Content/avatar/avatar2.png">
+              <img alt="Avatar" src= ${ "storage/img_paths/" + data.user_id + '/' + data.img_path }>
             </div>
             <div class="message-body">
               <div class="chat-message">

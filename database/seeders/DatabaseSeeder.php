@@ -38,7 +38,7 @@ class DatabaseSeeder extends Seeder
 //            ]);
 
 //        DB::table('chat_user')->where('id', 3)->update(['type' => false]);
-        DB::table('chats')->where('type', false)->delete();
+//        DB::table('chats')->where('type', false)->delete();
 //        DB::table('chats')->where('type', true)->delete();
 //        DB::table('users')->delete();
 //            DB::table('messages')->insert([

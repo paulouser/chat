@@ -40,7 +40,7 @@
                         <div class="chat_list" data-id="{{ $user->id }}">
                             <div class="chat_people">
                                 <div class="chat_img">
-                                    <img src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="img loading error">
+                                    <img src="storage/img_paths/{{ $user->id }}/{{ $user->img_path }}" alt="img loading error">
                                 </div>
                                 <div class="chat_ib">
                                     <h5>{{ $user->name }}
