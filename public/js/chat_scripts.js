@@ -12,37 +12,20 @@ $(document).ready(function(){
         let msgType = data.user_id == myId ? "out" : "in";
         let img = data.img_path;
         let msg = `
-        <div class="container content">
-        <div class="row">
-         <div class="card">
-          <div class="card-body height3">
-           <ul class="chat-list">
-            <li class=${ msgType }>
-             <div class="chat-img">
-              <img alt="Avtar" src=${ data.img_path }>
-             </div>
-             <div class="chat-body">
+        <ul class="message-list">
+          <li class=${ msgType }>
+            <div class="message-img">
+              <img alt="Avtar" src="https://bootdey.com/img/Content/avatar/avatar2.png">
+            </div>
+            <div class="message-body">
               <div class="chat-message">
-               <h5>${ data.name }</h5>
-               <p>${ data.message }</p>
-               <p>${ data.created_at }</p>
+                <h5 class="name">${ data.name }</h5>
+                <p class="text">${ data.message }</p>
+                <p class="date">${ data.created_at }</p>
               </div>
-             </div>
-            </li>
-           </ul>
-          </div>
-         </div>
-    </div>
-</div>`
-
-        // let msg = $("<div>", {class: "message"});
-        // msg.append($("<div>", {class: msgType})
-        //     .append($("<div>", {class: "message_img"})
-        //         .append($("<img>", {src: img, alt: "Error"})))
-        //     .append($("<div>", {class: "message_body"})
-        //         .append($("<p>", {class: 'message_writer'}).text(data.name))
-        //         .append($("<p>", {class: "message_text"}).text(data.message))
-        //         .append($("<span>", {class: "message_time"}).text(data.created_at))));
+            </div>
+          </li>
+        </ul>`
         return msg;
     }
 
@@ -57,6 +40,8 @@ $(document).ready(function(){
 
         $('.room_list').removeClass('active_messaging');
         $(".participate"). css("display", "none");
+        $(".room_name"). css("display", "none");
+        $(".new_room_name_btn"). css("display", "none");
 
 
         $.ajax({
@@ -65,9 +50,7 @@ $(document).ready(function(){
                 let myId = localStorage.getItem("my_id");
                 $(".msg_history").empty();
                 $(".write_msg").val('').attr('readonly', false);
-                //
-                // alert(JSON.stringify(data));
-                // console.log(JSON.stringify(data));
+
                 if (data.length !== 0){
                     for(let d of data) {
                         $(".msg_history").append(
@@ -140,6 +123,7 @@ $(document).ready(function(){
         $(".room_name"). css("display", "block").val('').attr('readonly', false);
         $(".new_room_name_btn"). css("display", "block").val('').attr('readonly', false);
     });
+
 
     $('.new_room_name_btn').click(function() {
         let new_room_name = $('.room_name').val();
@@ -214,6 +198,8 @@ $(document).ready(function(){
         $(".write_msg").val('').attr('readonly', true);
         $(".participate"). css("display", "none");
 
+        $(".room_name"). css("display", "none");
+        $(".new_room_name_btn"). css("display", "none");
 
         $.ajax({
             url: "/checking/" + roomId,
