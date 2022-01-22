@@ -24,33 +24,38 @@
                     <div class="recent_heading">
                         <h4>Users</h4>
                     </div>
-                    <div class="srch_bar">
+                    <div class="srch_bar ">
                         <div class="stylish-input-group">
-                            <input type="text" class="search-bar"  placeholder="Search" >
+                            <input type="text" id="searching" class="search-bar"  placeholder="Search" >
                             <span class="input-group-addon">
                                     <button type="button">
                                         <i class="fa fa-search" aria-hidden="true"></i>
                                     </button>
                                 </span>
+                            <div>
+                                <select id="ddlist" onchange="getValue();" name="ddlist">
+                                    <option>Results</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="inbox_chat">
-                    @foreach(\App\Models\User::all()->except(\Illuminate\Support\Facades\Auth::id()) as $user)
-                        <div class="chat_list" data-id="{{ $user->id }}">
-                            <div class="chat_people">
-                                <div class="chat_img">
-                                    <img src="storage/img_paths/{{ $user->id }}/{{ $user->img_path }}" alt="img loading error">
-                                </div>
-                                <div class="chat_ib">
-                                    <h5>{{ $user->name }}
-                                        <span class="chat_date">{{ $user->created_at->format("Y m d") }}</span>
-                                    </h5>
-                                    <p>{{ $user->email }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
+{{--                    @foreach(\App\Models\User::all()->except(\Illuminate\Support\Facades\Auth::id()) as $user)--}}
+{{--                        <div class="chat_list" data-id="{{ $user->id }}">--}}
+{{--                            <div class="chat_people">--}}
+{{--                                <div class="chat_img">--}}
+{{--                                    <img src="storage/img_paths/{{ $user->id }}/{{ $user->img_path }}" alt="img loading error">--}}
+{{--                                </div>--}}
+{{--                                <div class="chat_ib">--}}
+{{--                                    <h5>{{ $user->name }}--}}
+{{--                                        <span class="chat_date">{{ $user->created_at->format("Y m d") }}</span>--}}
+{{--                                    </h5>--}}
+{{--                                    <p>{{ $user->email }}</p>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    @endforeach--}}
 
                     <div class="heading_srch">
                         <div class="recent_heading">

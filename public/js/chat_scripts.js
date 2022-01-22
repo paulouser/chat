@@ -5,6 +5,10 @@ $(document).ready(function(){
         }
     });
 
+    // $('.srch_bar').change(function (){
+    //     // alert($('#searching').val());
+    // });
+
     function generateMessage(myId=null, data) {
         console.log(data.user_id);
         // let msgType = data.user_id == myId ? "outgoing_msg" : "incomming_msg";
@@ -26,7 +30,7 @@ $(document).ready(function(){
           </li>
         </ul>`
         return msg;
-    }
+    };
 
     $('.chat_list').click(function() {
         localStorage.setItem('your_id', $(this).data('id'));
@@ -225,6 +229,74 @@ $(document).ready(function(){
                 }
                 else if (data['status'] == false){
                     $(".participate"). css("display", "block");
+                }
+            }
+        });
+    });
+
+    // window.getValue = function getValue() {
+    //     let value = $('#searching').val();
+    //     $('#ddlist').append(`<option value="Select">${ localStorage.getItem('my_id') + ' || ' + localStorage.getItem('your_id') + ' || ' + localStorage.getItem('roomId')}</option>`);
+    // }
+
+    $(document).on('change', '#searching', function() {
+        $.ajax({
+            url: "/generate_searching_list/" + $(this).val(),
+            success: function (data) {
+                // if there is a list of matching users then generate dropdown list
+                if (data['status'] == true){
+                    // if matching list not empty, then generate dropdown list
+                    // before generating dropdown we must clear previous list
+                    $('#ddlist').empty();
+                    $('#ddlist').append(
+                        `<option class="items" value="Select">Select user</option>`
+                    )
+                    if (data['list'].length !== 0){
+                        // $('#ddlist').attr('size', data['list'].length);
+                        for(let d of data['list']) {
+                            $('#ddlist').append(
+                                `<option class="items" value="${ d.id }" data-list_item_id="${ d.id }">${ d.name }</option>`
+                            )
+                        }
+                    }
+                }
+            }
+        });
+    });
+
+    function generateFriend(friend){
+        return
+        ` <div class="chat_list" data-id="${ friend.user_id }">
+                <div class="chat_people">
+                    <div class="chat_img">
+                        <img src="storage/img_paths/${ friend.user_id }/${ friend.img_path }" alt="img loading error">
+                    </div>
+                    <div class="chat_ib">
+                        <h5>${ friend.user_name }
+                            <span class="chat_date">${ friend.created_at.format("Y m d") }</span>
+                        </h5>
+                        <p>${ friend.user_email }</p>
+                    </div>
+                </div>
+            </div>`
+    }
+
+    $(document).on('change', 'select', function() {
+        myId = localStorage.getItem('my_id')
+        clicked_item_id = this.value;
+        $('#ddlist').empty();
+        console.log(this.value);
+        $.ajax({
+            url: "/add_and_generate_friend_list/" + clicked_item_id,
+            success: function (data) {
+                if (data.length !== 0){
+                    for(let d of data) {
+                        if (d.id != myId){
+                            $('.inbox_chat').append(
+                                generateFriend(myId, d)
+                            )
+                        }
+                    }
                 }
             }
         });
