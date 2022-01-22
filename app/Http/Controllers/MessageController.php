@@ -33,7 +33,7 @@ class MessageController extends Controller
     public  function take_chat_user_id($chat_id){
         return DB::table('chat_user as cu')
             ->where('cu.chat_id', '=', $chat_id)
-            ->where('cu.user_id', '=', Auth::user()->id)
+            ->where('cu.user_id', '=', Auth::id())
             ->select('id as chat_user_id')
             ->first()->chat_user_id;
     }
@@ -69,6 +69,7 @@ class MessageController extends Controller
      */
     public function index($id, $msg = null)
     {
+//        dd($msg);
         if (empty($msg)){
             return 'emtpy';
         }
@@ -90,8 +91,9 @@ class MessageController extends Controller
      *
      * @return \Illuminate\Support\Collection
      */
-    public function create($room_id=null, $msg=null)
+    public function create($room_id, $msg=null)
     {
+//        dd($msg);
         if (empty($msg)){
             return 'emtpy';
         }

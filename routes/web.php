@@ -32,10 +32,11 @@ Route::get('/chat/{id}', 'App\Http\Controllers\ChatController@index')->name('cha
 
 Route::get('/messages/{id}/{msg?}', 'App\Http\Controllers\MessageController@index')
     ->name('message')
-    ->where('id', '[0-9]+');
+    ->where('id', '[0-9]+')
+    ->where('msg', '([A-Za-z0-9\-\_\ \!\%\'\`\[\]\{\}\=\,\/\~\@\#$\^\&\*\(\)\+\.\>\<\:\;\"/]+)');
 
-Route::get('/room/{room_id?}/{msg?}', 'App\Http\Controllers\MessageController@create')->name('room')
-    ->where('msg', '([A-Za-z0-9\-\_\!\%\'\`\[\]\{\}\=\,\/\~\@\#$\^\&\*\(\)\+\.\>\<\:\;\"/]+)');
+Route::get('/room/{room_id}/{msg?}', 'App\Http\Controllers\MessageController@create')->name('room')
+    ->where('msg', '([A-Za-z0-9\-\_\ \!\%\'\`\[\]\{\}\=\,\/\~\@\#$\^\&\*\(\)\+\.\>\<\:\;\"/]+)');
 
 
 Route::get('/rooms/{roomId?}', 'App\Http\Controllers\ChatUserController@index')->name('rooms');

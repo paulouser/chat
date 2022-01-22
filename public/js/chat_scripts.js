@@ -1,5 +1,4 @@
 $(document).ready(function(){
-    // bind the message send button to enter key
     $('.type_msg').keypress(function(e){
         if (e.which === 13){
             $(".msg_send_btn").click();
