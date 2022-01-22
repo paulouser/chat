@@ -122,15 +122,17 @@ $(document).ready(function(){
         $(".msg_history").empty();
         $(".room_name"). css("display", "block").val('').attr('readonly', false);
         $(".new_room_name_btn"). css("display", "block").val('').attr('readonly', false);
+        $("#myFile"). css("display", "block");
     });
 
 
     $('.new_room_name_btn').click(function() {
         let new_room_name = $('.room_name').val();
+
         $(".msg_history").empty();
         $(this). css("display", "none");
         $(".room_name"). css("display", "none");
-
+        $("#myFile"). css("display", "none");
 
         $.ajax({
             url: "/add_room/" + new_room_name,

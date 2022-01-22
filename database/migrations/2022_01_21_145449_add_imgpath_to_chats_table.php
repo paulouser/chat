@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddImgpathToMessagesTable extends Migration
+class AddImgpathToChatsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddImgpathToMessagesTable extends Migration
      */
     public function up()
     {
-        Schema::table('messages', function (Blueprint $table) {
-            $table->string('img_path')->default('https://bootdey.com/img/Content/avatar/avatar1.png');
+        Schema::table('chats', function (Blueprint $table) {
+            $table->string('img_path')->default('https://cdn-icons-png.flaticon.com/512/15/15491.png');
         });
     }
 
@@ -25,7 +25,7 @@ class AddImgpathToMessagesTable extends Migration
      */
     public function down()
     {
-        Schema::table('messages', function (Blueprint $table) {
+        Schema::table('chats', function (Blueprint $table) {
             $table->dropColumn('img_path');
         });
     }

@@ -198,6 +198,14 @@ img {
     font-size: 30px;
 }
 
+#myFile{
+    position: absolute;
+    top: 32%;
+    left: 72%;
+    transform: translate(-50%, -50%);
+    font-size: 19px;
+}
+
 
 .btn-outline-success:active{
     background-color: black;

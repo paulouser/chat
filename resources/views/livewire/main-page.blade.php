@@ -65,7 +65,7 @@
                             </div>
                         </div>
                     </div>
-                        <div id="rooms_part">
+                    <div id="rooms_part">
                         @foreach(\App\Models\chat::all() as $chat)
                             @if(!$chat->type)
                                 <div class="room_list" style='overflow: hidden' data-chat_id="{{ $chat->id }}">
@@ -80,13 +80,13 @@
                                 </div>
                             @endif
                         @endforeach
-                        </div>
+                    </div>
                 </div>
             </div>
-                <div class="mesgs">
-                    <button type="button" class=" btn btn-outline-success participate" style="display: none">Participate</button>
-                    <input type="text" class="room_name" placeholder="Enter a new room name!" style="display: none" readonly />
-                    <button type="button" class="btn btn-outline-success new_room_name_btn"  style="display: none" id="new_room_name">Create</button>
+            <div class="mesgs">
+                <button type="button" class=" btn btn-outline-success participate" style="display: none">Participate</button>
+                <input type="text" class="room_name" placeholder="Enter a new room name!" style="display: none" readonly />
+                <button type="button" class="btn btn-outline-success new_room_name_btn"  style="display: none" id="new_room_name">Create</button>
 
                 <div class="msg_history">
                 </div>
