@@ -2,12 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\chat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class SearchController extends Controller
 {
+    public function generateAllRoomChats(){
+        return DB::table('chats')
+            ->where('chats.type','=',false)
+            ->orderBy('chats.created_at')
+            ->get();
+    }
+
+    public function createRoomChat($chat_name){
+        $duplicate_name = chat::where('name', '=', $chat_name)->first();
+        if ($duplicate_name == null and !empty($chat_name)){
+            // there are no duplicate name's
+            DB::table('chats')->insert([
+                'name' => $chat_name,
+                'type' => false,
+                "created_at" =>  \Carbon\Carbon::now(),
+                "updated_at" => \Carbon\Carbon::now(),
+            ]);
+        }
+    }
+
     public function generate_friends_list(){
 //        dd('inside');
         return DB::table('chat_user as cu1')
@@ -105,11 +126,18 @@ class SearchController extends Controller
     /**
      * Display the specified resource.
      *
-     * @return \Illuminate\Support\Collection
+     * @return array
      */
     public function show()
     {
-        return $this->generate_friends_list();
+        $friend_list =  $this->generate_friends_list();
+
+        $this->createRoomChat('General');
+        $this->createRoomChat('Other');
+
+        $all_rooms = $this->generateAllRoomChats();
+
+        return array('friend_list' => $friend_list, 'all_rooms' => $all_rooms);
     }
 
     /**

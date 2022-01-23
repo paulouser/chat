@@ -51,4 +51,4 @@ Route::get('/checking/{roomId}', 'App\Http\Controllers\UserController@create')->
 
 Route::get('/generate_searching_list/{search_message}', 'App\Http\Controllers\SearchController@index')->name('search');
 Route::get('/add_friend/{friend_id}', 'App\Http\Controllers\SearchController@create')->name('search');
-Route::get('/generate_friend_list/', 'App\Http\Controllers\SearchController@show')->name('search');
+Route::get('/generate_friend_list_and_predefined_rooms/', 'App\Http\Controllers\SearchController@show')->name('search');

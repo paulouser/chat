@@ -1,17 +1,27 @@
 $(document).ready(function(){
-    $.ajax({ url: "/generate_friend_list",
+    $.ajax({ url: "/generate_friend_list_and_predefined_rooms",
         context: document.body,
         success: function(data){
-            const unique = [];
-            data.map(x => unique.filter(a => a.name == x.name && a.id == x.id).length > 0 ? null : unique.push(x));
             myId = localStorage.getItem('my_id');
+
+            const unique1 = [];
+            data['friend_list'].map(x => unique1.filter(a => a.name == x.name && a.id == x.id).length > 0 ? null : unique1.push(x));
             $('#friend_list').empty();
-            for(let friend of unique) {
+            for(let friend of unique1) {
                 if (friend.id != myId) {
                     $('#friend_list').append(
                         generateFriend(friend)
                     )
                 }
+            }
+
+            const unique2 = [];
+            data['all_rooms'].map(x => unique2.filter(a => a.name == x.name && a.id == x.id).length > 0 ? null : unique2.push(x));
+            $('#rooms_part').empty();
+            for(let chat of unique2) {
+                $('#rooms_part').append(
+                    generateChat(chat)
+                )
             }
         }
     });
@@ -63,6 +73,18 @@ $(document).ready(function(){
             </div>`
     };
 
+    function generateChat(chat){
+        return  `<div class="room_list" style='overflow: hidden' data-chat_id="${ chat.id }">
+                    <div class="chat_people">
+                        <div class="chat_img">
+                            <img src="https://cdn.iconscout.com/icon/premium/png-256-thumb/chat-room-3-1058983.png" alt="img loading error">
+                        </div>
+                        <div class="chat_ib">
+                            <h5>${ chat.name }<span class="chat_date">${ chat.created_at }</span></h5>
+                        </div>
+                    </div>
+                </div>`
+    };
 
     $(document).on ("click", ".chat_list", function () {
         // alert("hi");

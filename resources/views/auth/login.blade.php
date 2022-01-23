@@ -15,6 +15,14 @@
         <form method="POST" action="{{ route('login') }}">
             @csrf
 
+            <!-- User chat name-->
+                <div>
+                    <x-label for="name" :value="__('Chat Name - username')" />
+
+                    <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus />
+                </div>
+                <br/>
+
             <!-- Email Address -->
             <div>
                 <x-label for="email" :value="__('Email')" />
