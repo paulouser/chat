@@ -41,6 +41,7 @@ class DatabaseSeeder extends Seeder
 //        DB::table('chats')->where('type', false)->delete();
 //        DB::table('chats')->where('type', true)->delete();
 //        DB::table('users')->delete();
+//        DB::table('messages')->delete();
 //            DB::table('messages')->insert([
 //                'chat_user_id' => 216,
 //                'message' => 'new group message for 216 chat_user_id and  224 chatId',
