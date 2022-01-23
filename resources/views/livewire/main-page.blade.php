@@ -42,7 +42,6 @@
                 </div>
                 <div class="inbox_chat">
                     <div id="friend_list">
-
                     </div>
                     <div class="heading_srch">
                         <div class="recent_heading">

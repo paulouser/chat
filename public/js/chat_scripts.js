@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    $.ajax({ url: "/generate_friend_list_and_predefined_rooms",
+    $.ajax({ url: "/generate_friend_list_and_predefined_rooms/",
         context: document.body,
         success: function(data){
             myId = localStorage.getItem('my_id');
@@ -16,7 +16,8 @@ $(document).ready(function(){
             }
 
             const unique2 = [];
-            data['all_rooms'].map(x => unique2.filter(a => a.name == x.name && a.id == x.id).length > 0 ? null : unique2.push(x));
+            // alert(JSON.stringify(data['room_list']));
+            data['room_list'].map(x => unique2.filter(a => a.name == x.name && a.id == x.id).length > 0 ? null : unique2.push(x));
             $('#rooms_part').empty();
             for(let chat of unique2) {
                 $('#rooms_part').append(
@@ -175,22 +176,32 @@ $(document).ready(function(){
         $.ajax({
             url: "/generate_searching_list/" + $(this).val(),
             success: function (data) {
-                // if there is a list of matching users then generate dropdown list
-                if (data['status'] == true){
-                    // if matching list not empty, then generate dropdown list
+                if (data['status1'] || data['status2']){
                     // before generating dropdown we must clear previous list
                     $('#ddlist').empty();
                     $('#ddlist').append(
-                        `<option class="items" value="Select">Select user</option>`
+                        `<option class="items" value="Select">Select user/room</option>`
                     )
-                    if (data['list'].length !== 0){
-                        // $('#ddlist').attr('size', data['list'].length);
-                        for(let d of data['list']) {
-                            if (d.id != myId){
-                                $('#ddlist').append(
-                                    `<option class="items" value="${ d.id }" data-list_item_id="${ d.id }">${ d.name }</option>`
-                                )
-                            }
+                }
+
+                // if there is a list of matching users
+                // then generate dropdown list for users
+                if (data['status1'] == true){
+                    // $('#ddlist').attr('size', data['list'].length);
+                    for(let d of data['users_list']) {
+                        if (d.id != myId){
+                            $('#ddlist').append(
+                                `<option class="items" value="${ d.id }"  name="user">User : ${ d.name }</option>`
+                            )
+                        }
+                    }
+                }
+                if (data['status2'] == true){
+                    for(let d of data['rooms_list']) {
+                        if (d.id != myId){
+                            $('#ddlist').append(
+                                `<option class="items" value="${ d.id }" name="room">Room : ${ d.name }</option>`
+                            )
                         }
                     }
                 }
@@ -199,10 +210,20 @@ $(document).ready(function(){
     });
 
     $(document).on('change', 'select', function() {
-        clicked_item_id = this.value;
+        let clicked_item_id = this.value;
+
+        let optionSelected = $(this).find('option:selected').attr('name');
+        let Type = '';
+
+        if (optionSelected == 'room'){
+            Type = 'room';
+        }else if (optionSelected = 'user'){
+            Type = 'user';
+        }
         $('#ddlist').empty().hide();
+
         $.ajax({
-            url: "/add_friend/" + clicked_item_id,
+            url: "/add_friend_or_room/" + clicked_item_id + '/' + Type,
             success: function (data) {
                 if (data == true){
                     $('.inbox_chat').append(location.reload(true))

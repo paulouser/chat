@@ -9,15 +9,48 @@ use Illuminate\Support\Facades\DB;
 
 class SearchController extends Controller
 {
-    public function generateAllRoomChats(){
+    public function getGeneralChatId(){
         return DB::table('chats')
-            ->where('chats.type','=',false)
-            ->orderBy('chats.created_at')
+            ->where('chats.name','=', 'General')
+            ->first()->id;
+    }
+
+    public function getOtherChatId(){
+        return DB::table('chats')
+            ->where('chats.name','=', 'Other')
+            ->first()->id;
+    }
+
+    public function insert_me_in_PredifinedRooms($general_chat_id, $other_chat_id){
+
+        DB::table('chat_user')->insert([
+            'user_id' => Auth::id(),
+            'chat_id' => $general_chat_id,
+            "created_at" =>  \Carbon\Carbon::now(),
+            "updated_at" => \Carbon\Carbon::now(),
+        ]);
+
+        DB::table('chat_user')->insert([
+            'user_id' => Auth::id(),
+            'chat_id' => $other_chat_id,
+            "created_at" =>  \Carbon\Carbon::now(),
+            "updated_at" => \Carbon\Carbon::now(),
+        ]);
+    }
+
+    public function generateRoomList(){
+        return DB::table('chats as ch')
+            ->join('chat_user as cu','ch.id','=','cu.chat_id')
+            ->where('ch.type','=',false)
+            ->where('cu.user_id','=',Auth::id())
+            ->orderBy('ch.created_at')
+            ->select('ch.*')
             ->get();
     }
 
-    public function createRoomChat($chat_name){
+    public function createPredefinedRoomChat($chat_name){
         $duplicate_name = chat::where('name', '=', $chat_name)->first();
+
         if ($duplicate_name == null and !empty($chat_name)){
             // there are no duplicate name's
             DB::table('chats')->insert([
@@ -27,10 +60,10 @@ class SearchController extends Controller
                 "updated_at" => \Carbon\Carbon::now(),
             ]);
         }
+
     }
 
     public function generate_friends_list(){
-//        dd('inside');
         return DB::table('chat_user as cu1')
             ->join('chats as ch', 'ch.id', '=', 'cu1.chat_id')
             ->leftJoin('chat_user as cu2', 'cu1.chat_id', '=', 'cu2.chat_id')
@@ -64,7 +97,7 @@ class SearchController extends Controller
         ]);
     }
 
-    public function get_matched_chat_id($id){
+    public function get_matched_chat($id){
         return DB::table('chats as ch')
             ->join('chat_user as cu1', 'ch.id', '=', 'cu1.chat_id')
             ->leftJoin('chat_user as cu2', 'cu1.chat_id', '=', 'cu2.chat_id')
@@ -75,11 +108,41 @@ class SearchController extends Controller
             ->first();
     }
 
-    function generateMatchingList($search_message){
+    public function get_matched_room($roomId){
+        return DB::table('chat_user as cu')
+            ->join('chats as ch', 'ch.id','=', 'cu.chat_id')
+            ->where('ch.type','=',false)
+            ->where('cu.user_id','=', Auth::id())
+            ->where('ch.id','=', $roomId)
+            ->first();
+    }
+
+    public function addInRoom($roomId){
+        DB::table('chat_user')->insert([
+            'user_id' => Auth::id(),
+            'chat_id' => $roomId,
+            "created_at" =>  \Carbon\Carbon::now(),
+            "updated_at" => \Carbon\Carbon::now(),
+        ]);
+    }
+
+    public function generateMatchingUsersList($search_message){
         return DB::table('users')
             ->where('users.name', 'like', $search_message.'%')
             ->select('users.*')
             ->orderBy('users.created_at')
+            ->get();
+    }
+
+    public function generateMatchingRoomsList($search_message){
+        return DB::table('chat_user as cu')
+            ->join('chats as ch','ch.id','=','cu.chat_id')
+            ->where('ch.type', '=', false)
+            ->where('ch.name', 'like', $search_message.'%')
+            ->select('users.*')
+            ->groupBy('ch.id')
+            ->orderBy('ch.created_at')
+            ->select('ch.*')
             ->get();
     }
 
@@ -90,12 +153,21 @@ class SearchController extends Controller
      */
     public function index($search_message)
     {
-        $is_any_matching = true;
-        $matching_users_list = $this->generateMatchingList($search_message);
+        $is_any_users_matching = true;
+        $is_any_rooms_matching = true;
+
+        $matching_users_list = $this->generateMatchingUsersList($search_message);
+        $matching_rooms_list = $this->generateMatchingRoomsList($search_message);
+
         if (empty($matching_users_list)){
-            $is_any_matching = false;
+            $is_any_users_matching = false;
         }
-        return array('list' => $matching_users_list, 'status' => $is_any_matching);
+
+        if (empty($matching_rooms_list)){
+            $is_any_rooms_matching = false;
+        }
+
+        return array('users_list' => $matching_users_list, 'rooms_list' => $matching_rooms_list, 'status1' => $is_any_users_matching, 'status2' => $is_any_rooms_matching);
     }
 
     /**
@@ -103,13 +175,23 @@ class SearchController extends Controller
      *
      * @return false
      */
-    public function create($friend_id)
+    public function create($friend_or_room_id, $Type)
     {
-        if (empty($this->get_matched_chat_id($friend_id))){
-            $this->createChat($friend_id);
-            return true;
+        if ($Type == 'user'){
+            if (empty($this->get_matched_chat($friend_or_room_id))){
+                $this->createChat($friend_or_room_id);
+                return true;
+            } else{
+                return false;
+            }
+        }else if ($Type == 'room'){
+            if (empty($this->get_matched_room($friend_or_room_id))){
+                $this->addInRoom($friend_or_room_id);
+                return true;
+            } else{
+                return false;
+            }
         }
-        return false;
     }
 
     /**
@@ -132,12 +214,21 @@ class SearchController extends Controller
     {
         $friend_list =  $this->generate_friends_list();
 
-        $this->createRoomChat('General');
-        $this->createRoomChat('Other');
+        $this->createPredefinedRoomChat('General');
+        $this->createPredefinedRoomChat('Other');
 
-        $all_rooms = $this->generateAllRoomChats();
+        // get General chat_id
+        $general_chat_id = $this->getGeneralChatId();
 
-        return array('friend_list' => $friend_list, 'all_rooms' => $all_rooms);
+        // get Other chat_id
+        $other_chat_id = $this->getOtherChatId();
+
+        // insert me in this chats
+        $this->insert_me_in_PredifinedRooms($general_chat_id, $other_chat_id);
+
+        $room_list = $this->generateRoomList();
+
+        return array('friend_list' => $friend_list, 'room_list' => $room_list);
     }
 
     /**

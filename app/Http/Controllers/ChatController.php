@@ -29,7 +29,9 @@ class ChatController extends Controller
     public function createChat($id){
         $chatId = DB::table('chats')->insertGetId([
             'name' => Auth::user()->name . "'s and " . DB::table('users')->where('id', $id)->pluck('name')->first() . " 's chat",
-            'type' => true
+            'type' => true,
+            "created_at" =>  \Carbon\Carbon::now(),
+            "updated_at" => \Carbon\Carbon::now(),
         ]);
 
         // create 2 chat_user items (auth:id clicked:id)
