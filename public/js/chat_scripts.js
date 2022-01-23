@@ -1,13 +1,28 @@
 $(document).ready(function(){
+    $.ajax({ url: "/generate_friend_list",
+        context: document.body,
+        success: function(data){
+            const unique = [];
+            data.map(x => unique.filter(a => a.name == x.name && a.id == x.id).length > 0 ? null : unique.push(x));
+            myId = localStorage.getItem('my_id');
+            $('#friend_list').empty();
+            for(let friend of unique) {
+                if (friend.id != myId) {
+                    $('#friend_list').append(
+                        generateFriend(friend)
+                    )
+                }
+            }
+        }
+    });
+
     $('.type_msg').keypress(function(e){
         if (e.which === 13){
             $(".msg_send_btn").click();
         }
     });
 
-    // $('.srch_bar').change(function (){
-    //     // alert($('#searching').val());
-    // });
+    $('#ddlist').empty().hide();
 
     function generateMessage(myId=null, data) {
         console.log(data.user_id);
@@ -32,7 +47,25 @@ $(document).ready(function(){
         return msg;
     };
 
-    $('.chat_list').click(function() {
+    function generateFriend(friend){
+        return  ` <div class="chat_list" data-id=${ friend.id }>
+                <div class="chat_people">
+                    <div class="chat_img">
+                        <img src="storage/img_paths/${ friend.id }/${ friend.img_path }" alt="img loading error">
+                    </div>
+                    <div class="chat_ib">
+                        <h5>${ friend.name }
+                            <span class="chat_date">${ friend.created_at }</span>
+                        </h5>
+                        <p>${ friend.email }</p>
+                    </div>
+                </div>
+            </div>`
+    };
+
+
+    $(document).on ("click", ".chat_list", function () {
+        // alert("hi");
         localStorage.setItem('your_id', $(this).data('id'));
 
         $(this).siblings().removeClass('active_chat');
@@ -45,6 +78,7 @@ $(document).ready(function(){
         $(".participate"). css("display", "none");
         $(".room_name"). css("display", "none");
         $(".new_room_name_btn"). css("display", "none");
+        // alert('before ajax');
 
 
         $.ajax({
@@ -66,129 +100,7 @@ $(document).ready(function(){
         });
     });
 
-    $('.msg_send_btn').click(function() {
-
-        if ( $(".chat_list").hasClass('active_messaging')){
-            // for users chat messages
-            $.ajax({
-                url: "/messages/" + localStorage.getItem("your_id") + '/' + $('.write_msg').val(),
-                success: function (data) {
-                    let myId = localStorage.getItem("my_id");
-
-                    if (data === 'emtpy'){
-                        console.log('empty text');
-                        return;
-                    } else{
-                        $(".msg_history").empty();
-                        if (data.length === 0){
-                            alert('All chat history deleted from server!')
-                        }else if (data.length !== 0){
-                            $(".write_msg").val('').attr('readonly', false);
-                            for(let d of data) {
-                                $(".msg_history").append(
-                                    generateMessage(myId, d)
-                                );
-                            }
-                            $(".msg_history").animate({scrollTop: $(".msg_history")[0].scrollHeight}, 10);
-                        }
-                    }
-                }
-            });
-        }
-        else if ( $(".room_list").hasClass('active_messaging')){
-            // for rooms messages
-            $.ajax({
-                url: "/room/" + localStorage.getItem("roomId") + '/' + $('.write_msg').val(),
-                success: function (data) {
-                    let myId = localStorage.getItem("my_id");
-                    if (data === 'emtpy'){
-                        console.log('empty text');
-                        return;
-                    } else if (data.length !== 0){
-                        $(".write_msg").val('').attr('readonly', false);
-                        $(".msg_history").empty();
-                        for(let d of data) {
-                            $(".msg_history").append(
-                                generateMessage(myId, d)
-                            )
-                            $(".msg_history").animate({scrollTop: $(".msg_history")[0].scrollHeight}, 10);
-
-                        }
-                    }
-                }
-            });
-        }
-    });
-
-
-    $('.adding_room').click(function(){
-        $(".msg_history").empty();
-        $(".room_name"). css("display", "block").val('').attr('readonly', false);
-        $(".new_room_name_btn"). css("display", "block").val('').attr('readonly', false);
-        $("#myFile"). css("display", "block");
-    });
-
-
-    $('.new_room_name_btn').click(function() {
-        let new_room_name = $('.room_name').val();
-
-        $(".msg_history").empty();
-        $(this). css("display", "none");
-        $(".room_name"). css("display", "none");
-        $("#myFile"). css("display", "none");
-
-        $.ajax({
-            url: "/add_room/" + new_room_name,
-            success: function () {
-                $(".write_msg").val('').attr('readonly', false).append(location.reload(true));
-            }
-        });
-    });
-
-
-    // // generate in place the user in table
-    // let user = {};
-    // let html = `<div className="chat_list" data-id="${user.id}">
-    //     <div className="chat_people">
-    //         <div className="chat_img">
-    //             <img src="${user.img_path}" alt="img loading error">
-    //         </div>
-    //         <div className="chat_ib">
-    //             <h5>${$user.name}
-    //                 <span className="chat_date">${$user.created_at}</span>
-    //             </h5>
-    //             <p>${user.email}</p>
-    //         </div>
-    //     </div>
-    // </div>`;
-
-
-    $('.participate').click(function (){
-        let roomId = localStorage.getItem('roomId');
-        let myId = localStorage.getItem("my_id");
-
-        $(".msg_history").empty();
-        // $(".participate").hide();
-        $(".participate"). css("display", "none");
-
-        // load the messages
-        $.ajax({
-            url: "/getmessages/" + roomId,
-            success: function (data) {
-                $(".write_msg").val('').attr('readonly', false);
-                if (data.length !== 0){
-                    for(let d of data) {
-                        $(".msg_history").append(
-                            generateMessage(myId, d)
-                        )
-                        $(".msg_history").animate({scrollTop: $(".msg_history")[0].scrollHeight}, 10);
-                    }
-                }
-            }
-        })
-    });
-
-    $('.room_list').click(function() {
+    $(document).on ("click", ".room_list", function (){
         localStorage.setItem('roomId', $(this).data('chat_id'));
         var roomId = localStorage.getItem('roomId');
         $(".msg_history").empty();
@@ -234,12 +146,10 @@ $(document).ready(function(){
         });
     });
 
-    // window.getValue = function getValue() {
-    //     let value = $('#searching').val();
-    //     $('#ddlist').append(`<option value="Select">${ localStorage.getItem('my_id') + ' || ' + localStorage.getItem('your_id') + ' || ' + localStorage.getItem('roomId')}</option>`);
-    // }
 
     $(document).on('change', '#searching', function() {
+        myId = localStorage.getItem('my_id');
+        $('#ddlist').empty().show();
         $.ajax({
             url: "/generate_searching_list/" + $(this).val(),
             success: function (data) {
@@ -254,51 +164,135 @@ $(document).ready(function(){
                     if (data['list'].length !== 0){
                         // $('#ddlist').attr('size', data['list'].length);
                         for(let d of data['list']) {
-                            $('#ddlist').append(
-                                `<option class="items" value="${ d.id }" data-list_item_id="${ d.id }">${ d.name }</option>`
-                            )
+                            if (d.id != myId){
+                                $('#ddlist').append(
+                                    `<option class="items" value="${ d.id }" data-list_item_id="${ d.id }">${ d.name }</option>`
+                                )
+                            }
                         }
                     }
                 }
             }
         });
     });
-
-    function generateFriend(friend){
-        return
-        ` <div class="chat_list" data-id="${ friend.user_id }">
-                <div class="chat_people">
-                    <div class="chat_img">
-                        <img src="storage/img_paths/${ friend.user_id }/${ friend.img_path }" alt="img loading error">
-                    </div>
-                    <div class="chat_ib">
-                        <h5>${ friend.user_name }
-                            <span class="chat_date">${ friend.created_at.format("Y m d") }</span>
-                        </h5>
-                        <p>${ friend.user_email }</p>
-                    </div>
-                </div>
-            </div>`
-    }
 
     $(document).on('change', 'select', function() {
-        myId = localStorage.getItem('my_id')
         clicked_item_id = this.value;
-        $('#ddlist').empty();
-        console.log(this.value);
+        $('#ddlist').empty().hide();
         $.ajax({
-            url: "/add_and_generate_friend_list/" + clicked_item_id,
+            url: "/add_friend/" + clicked_item_id,
             success: function (data) {
-                if (data.length !== 0){
-                    for(let d of data) {
-                        if (d.id != myId){
-                            $('.inbox_chat').append(
-                                generateFriend(myId, d)
-                            )
+                if (data == true){
+                    $('.inbox_chat').append(location.reload(true))
+                }
+            },
+        });
+    });
+
+
+    $('.msg_send_btn').click(function() {
+
+        if ( $(".chat_list").hasClass('active_messaging')){
+            // for users chat messages
+            $.ajax({
+                url: "/messages/" + localStorage.getItem("your_id") + '/' + $('.write_msg').val(),
+                success: function (data) {
+                    let myId = localStorage.getItem("my_id");
+
+                    if (data === 'emtpy'){
+                        console.log('empty text');
+                        return;
+                    } else{
+                        $(".msg_history").empty();
+                        if (data.length === 0){
+                            alert('All chat history deleted from server!')
+                        }else if (data.length !== 0){
+                            $(".write_msg").val('').attr('readonly', false);
+                            for(let d of data) {
+                                $(".msg_history").append(
+                                    generateMessage(myId, d)
+                                );
+                            }
+                            $(".msg_history").animate({scrollTop: $(".msg_history")[0].scrollHeight}, 10);
                         }
                     }
                 }
+            });
+        }
+        else if ( $(".room_list").hasClass('active_messaging')){
+            // for rooms messages
+            $.ajax({
+                url: "/room/" + localStorage.getItem("roomId") + '/' + $('.write_msg').val(),
+                success: function (data) {
+                    let myId = localStorage.getItem("my_id");
+                    if (data === 'emtpy'){
+                        console.log('empty text');
+                        return;
+                    } else{
+                        $(".msg_history").empty();
+                        $(".write_msg").val('').attr('readonly', false);
+                        if (data.length === 0) {
+                            alert('All chat history deleted from server!')
+                        }else if (data.length !== 0){
+                            for(let d of data) {
+                                $(".msg_history").append(
+                                    generateMessage(myId, d)
+                                )
+                                $(".msg_history").animate({scrollTop: $(".msg_history")[0].scrollHeight}, 10);
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    });
+
+    $('.participate').click(function (){
+        let roomId = localStorage.getItem('roomId');
+        let myId = localStorage.getItem("my_id");
+
+        $(".msg_history").empty();
+        // $(".participate").hide();
+        $(".participate"). css("display", "none");
+
+        // load the messages
+        $.ajax({
+            url: "/getmessages/" + roomId,
+            success: function (data) {
+                $(".write_msg").val('').attr('readonly', false);
+                if (data.length !== 0){
+                    for(let d of data) {
+                        $(".msg_history").append(
+                            generateMessage(myId, d)
+                        )
+                        $(".msg_history").animate({scrollTop: $(".msg_history")[0].scrollHeight}, 10);
+                    }
+                }
+            }
+        })
+    });
+
+    $('.adding_room').click(function(){
+        $(".msg_history").empty();
+        $(".room_name"). css("display", "block").val('').attr('readonly', false);
+        $(".new_room_name_btn"). css("display", "block").val('').attr('readonly', false);
+        $("#myFile"). css("display", "block");
+    });
+
+    $('.new_room_name_btn').click(function() {
+        let new_room_name = $('.room_name').val();
+
+        $(".msg_history").empty();
+        $(this). css("display", "none");
+        $(".room_name"). css("display", "none");
+        $("#myFile"). css("display", "none");
+
+        $.ajax({
+            url: "/add_room/" + new_room_name,
+            success: function () {
+                $(".write_msg").val('').attr('readonly', false).append(location.reload(true));
             }
         });
     });
+
 });

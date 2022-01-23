@@ -98,8 +98,13 @@ class MessageController extends Controller
             return 'emtpy';
         }
 
-        $chat_user_id = $this->take_chat_user_id($room_id);
-        $this->insert_message($chat_user_id, $msg);
+        if ($msg == "delete"){
+            $this->delete_chat_history($room_id);
+        } else{
+            $chat_user_id = $this->take_chat_user_id($room_id);
+            $this->insert_message($chat_user_id, $msg);
+        }
+
         return $this->getChatMessages($room_id);
 
     }

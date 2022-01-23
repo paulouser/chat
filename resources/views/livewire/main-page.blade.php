@@ -33,7 +33,7 @@
                                     </button>
                                 </span>
                             <div>
-                                <select id="ddlist" onchange="getValue();" name="ddlist">
+                                <select id="ddlist" name="ddlist">
                                     <option>Results</option>
                                 </select>
                             </div>
@@ -41,33 +41,14 @@
                     </div>
                 </div>
                 <div class="inbox_chat">
-{{--                    @foreach(\App\Models\User::all()->except(\Illuminate\Support\Facades\Auth::id()) as $user)--}}
-{{--                        <div class="chat_list" data-id="{{ $user->id }}">--}}
-{{--                            <div class="chat_people">--}}
-{{--                                <div class="chat_img">--}}
-{{--                                    <img src="storage/img_paths/{{ $user->id }}/{{ $user->img_path }}" alt="img loading error">--}}
-{{--                                </div>--}}
-{{--                                <div class="chat_ib">--}}
-{{--                                    <h5>{{ $user->name }}--}}
-{{--                                        <span class="chat_date">{{ $user->created_at->format("Y m d") }}</span>--}}
-{{--                                    </h5>--}}
-{{--                                    <p>{{ $user->email }}</p>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    @endforeach--}}
+                    <div id="friend_list">
 
+                    </div>
                     <div class="heading_srch">
                         <div class="recent_heading">
                             <h4 >Rooms
                                 <button class="adding_room plus-button plus-button--small"></button>
                             </h4>
-                        </div>
-                        <div class="srch_bar">
-                            <div class="stylish-input-group">
-                                <input type="text" class="search-bar"  placeholder="Search" >
-                                <span class="input-group-addon"></span>
-                            </div>
                         </div>
                     </div>
                     <div id="rooms_part">
@@ -97,7 +78,6 @@
                 </div>
                 <div class="type_msg">
                     <div>
-
                         <input type="text" class="write_msg" placeholder="Type a message" readonly />
                         <button class="msg_send_btn" type="button" id="send_message">
                             <img src="https://upload.wikimedia.org/wikipedia/commons/0/0c/Message_%28Send%29.png" width="28px">

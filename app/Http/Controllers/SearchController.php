@@ -9,14 +9,15 @@ use Illuminate\Support\Facades\DB;
 class SearchController extends Controller
 {
     public function generate_friends_list(){
+//        dd('inside');
         return DB::table('chat_user as cu1')
             ->join('chats as ch', 'ch.id', '=', 'cu1.chat_id')
             ->leftJoin('chat_user as cu2', 'cu1.chat_id', '=', 'cu2.chat_id')
             ->join('users as us', 'us.id', '=', 'cu2.user_id')
             ->where('ch.type', '=', true)
             ->where('cu1.user_id', '=', Auth::id())
-            ->where('cu1.user_id', '<>', 'cu2.user_id')
-            ->select('us.id as user_id', 'us.name as user_name', 'us.email as user_email', 'us.img_path as img_path', 'us.created_at as created_at')
+//            ->where('cu2.user_id', '<>', 'cu1.user_id')
+            ->select('us.id', 'us.name', 'us.email', 'us.img_path', 'us.created_at')
             ->orderBy('us.created_at')
             ->get();
     }
@@ -79,15 +80,15 @@ class SearchController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Support\Collection
+     * @return false
      */
     public function create($friend_id)
     {
         if (empty($this->get_matched_chat_id($friend_id))){
             $this->createChat($friend_id);
+            return true;
         }
-        // generate and return all my related chat_id's users(friends) list
-        return $this->generate_friends_list();
+        return false;
     }
 
     /**
@@ -104,12 +105,11 @@ class SearchController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Support\Collection
      */
-    public function show($id)
+    public function show()
     {
-        //
+        return $this->generate_friends_list();
     }
 
     /**
