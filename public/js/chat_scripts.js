@@ -35,16 +35,26 @@ $(document).ready(function(){
 
     $('#ddlist').empty().hide();
 
+    $('body').on('click','#message_item img',function(){
+        alert('it works');
+        let clicked_id = $(this).data('rooms_user_id');
+        alert(clicked_id);
+
+    });
+
     function generateMessage(myId=null, data) {
-        console.log(data.user_id);
-        // let msgType = data.user_id == myId ? "outgoing_msg" : "incomming_msg";
+        localStorage.setItem('msg_clicked_id', data.user_id);
+        let clicked_id = localStorage.getItem('msg_clicked_id');
+        // alert(clicked_id);
+
+
         let msgType = data.user_id == myId ? "out" : "in";
         let img = data.img_path;
         let msg = `
-        <ul class="message-list">
+        <ul class="message-list" id="message_item" >
           <li class=${ msgType }>
             <div class="message-img">
-              <img alt="Avatar" src= ${ "storage/img_paths/" + data.user_id + '/' + data.img_path }>
+              <img alt="Avatar" src= ${ "storage/img_paths/" + data.user_id + '/' + data.img_path } data-rooms_user_id=${ data.user_id }>
             </div>
             <div class="message-body">
               <div class="chat-message">
@@ -68,7 +78,7 @@ $(document).ready(function(){
                         <h5>${ friend.name }
                             <span class="chat_date">${ friend.created_at }</span>
                         </h5>
-                        <p>${ friend.email }</p>
+                        <p>${ friend.full_name }</p>
                     </div>
                 </div>
             </div>`
