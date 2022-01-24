@@ -37,7 +37,7 @@ class UserController extends Controller
     public function addInRoom($roomId){
         DB::table('chat_user')->insert([
             'chat_id' => $roomId,
-            'user_id' => Auth::user()->id,
+            'user_id' => Auth::id(),
             "created_at" =>  \Carbon\Carbon::now(),
             "updated_at" => \Carbon\Carbon::now(),
         ]);

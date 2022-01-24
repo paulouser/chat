@@ -217,16 +217,24 @@ $(document).ready(function(){
 
         if (optionSelected == 'room'){
             Type = 'room';
+            $('.msg_history').empty();
+            localStorage.setItem('clicked_item_id', clicked_item_id);
+
         }else if (optionSelected = 'user'){
             Type = 'user';
+            localStorage.setItem('clicked_item_id', '-1');
         }
         $('#ddlist').empty().hide();
 
         $.ajax({
             url: "/add_friend_or_room/" + clicked_item_id + '/' + Type,
             success: function (data) {
-                if (data == true){
-                    $('.inbox_chat').append(location.reload(true))
+                if (data == 1){
+                    // alert('creating new users chat');
+                    $('.inbox_chat').append(location.reload(true));
+                }else if (data == 2){
+                    $('.participate').show();
+                    // alert('no matching room');
                 }
             },
         });
@@ -291,26 +299,17 @@ $(document).ready(function(){
     });
 
     $('.participate').click(function (){
-        let roomId = localStorage.getItem('roomId');
+        let roomId = localStorage.getItem('clicked_item_id');
         let myId = localStorage.getItem("my_id");
 
         $(".msg_history").empty();
-        // $(".participate").hide();
         $(".participate"). css("display", "none");
 
-        // load the messages
         $.ajax({
             url: "/getmessages/" + roomId,
             success: function (data) {
                 $(".write_msg").val('').attr('readonly', false);
-                if (data.length !== 0){
-                    for(let d of data) {
-                        $(".msg_history").append(
-                            generateMessage(myId, d)
-                        )
-                        $(".msg_history").animate({scrollTop: $(".msg_history")[0].scrollHeight}, 10);
-                    }
-                }
+                $('.inbox_chat').append(location.reload(true));
             }
         })
     });

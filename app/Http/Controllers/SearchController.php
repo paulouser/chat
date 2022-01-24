@@ -126,7 +126,10 @@ class SearchController extends Controller
         ]);
     }
 
-    public function generateMatchingUsersList($search_message){
+    public function generateMatchingUsersList($search_message=null){
+        if ($search_message == null){
+            $search_message = '';
+        }
         return DB::table('users')
             ->where('users.name', 'like', $search_message.'%')
             ->select('users.*')
@@ -151,7 +154,7 @@ class SearchController extends Controller
      *
      * @return array
      */
-    public function index($search_message)
+    public function index($search_message=null)
     {
         $is_any_users_matching = true;
         $is_any_rooms_matching = true;
@@ -180,16 +183,12 @@ class SearchController extends Controller
         if ($Type == 'user'){
             if (empty($this->get_matched_chat($friend_or_room_id))){
                 $this->createChat($friend_or_room_id);
-                return true;
-            } else{
-                return false;
+                return 1;
             }
         }else if ($Type == 'room'){
             if (empty($this->get_matched_room($friend_or_room_id))){
-                $this->addInRoom($friend_or_room_id);
-                return true;
-            } else{
-                return false;
+//                $this->addInRoom($friend_or_room_id);
+                return 2;
             }
         }
     }
