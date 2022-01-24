@@ -11,6 +11,41 @@ use Illuminate\Support\Facades\DB;
 
 class ChatUserController extends Controller
 {
+    public function createChat($id){
+        $chatId = DB::table('chats')->insertGetId([
+            'name' => Auth::user()->name . "'s and " . DB::table('users')->where('id', $id)->pluck('name')->first() . " 's chat",
+            'type' => true,
+            "created_at" =>  \Carbon\Carbon::now(),
+            "updated_at" => \Carbon\Carbon::now(),
+        ]);
+
+        // create 2 chat_user items (auth:id clicked:id)
+        DB::table('chat_user')->insert([
+            'chat_id' => $chatId,
+            'user_id' => Auth::user()->id,
+            "created_at" =>  \Carbon\Carbon::now(),
+            "updated_at" => \Carbon\Carbon::now(),
+        ]);
+        DB::table('chat_user')->insert([
+            'chat_id' => $chatId,
+            'user_id' => $id,
+            "created_at" =>  \Carbon\Carbon::now(),
+            "updated_at" => \Carbon\Carbon::now(),
+        ]);
+        return $chatId;
+    }
+
+    public function get_matched_chat_id($id){
+        return DB::table('chats as ch')
+            ->join('chat_user as cu1', 'ch.id', '=', 'cu1.chat_id')
+            ->leftJoin('chat_user as cu2', 'cu1.chat_id', '=', 'cu2.chat_id')
+            ->where('ch.type', '=', true)
+            ->where('cu1.user_id', '=', Auth::id())
+            ->where('cu2.user_id', '=', $id)
+            ->select('cu1.chat_id as chat_id')
+            ->first();
+    }
+
     public function getChatMessages($roomId){
         return DB::table('messages as m')
             ->leftJoin('chat_user as cu', 'm.chat_user_id', '=', 'cu.id')
@@ -110,11 +145,23 @@ class ChatUserController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\chat_user  $chat_user
-     * @return \Illuminate\Http\Response
+     * @return array
      */
-    public function show(chat_user $chat_user)
+    public function show($friendId)
     {
-        //
+        $matched_chat = $this->get_matched_chat_id($friendId);
+        $messages = '';
+
+        if (empty($matched_chat)){
+            $this->createChat($friendId);
+            $status = false;
+        }else{
+            $chatId = $matched_chat->chat_id;
+            $messages = $this->getChatMessages($chatId);
+            $status = true;
+        }
+
+        return array('messages' => $messages, 'status' => $status);
     }
 
     /**

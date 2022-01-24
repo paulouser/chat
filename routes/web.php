@@ -40,8 +40,8 @@ Route::get('/room/{room_id}/{msg?}', 'App\Http\Controllers\MessageController@cre
 
 
 Route::get('/rooms/{roomId?}', 'App\Http\Controllers\ChatUserController@index')->name('rooms');
-
 Route::get('/chat_user/{chat_name?}', 'App\Http\Controllers\ChatUserController@create')->name('chat_user');
+Route::get('/start_chat/{friendId}', 'App\Http\Controllers\ChatUserController@show')->name('chat_user');
 
 Route::get('/add_room/{room_name?}', 'App\Http\Controllers\RoomsController@index')->name('rooms');
 

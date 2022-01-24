@@ -16,7 +16,7 @@
 
 <body>
 <div class="container">
-    <h3 class="text-center">Chat history</h3>
+    <h3 class="text-center" id="header">Chat history</h3>
     <div class="messaging">
         <div class="inbox_msg">
             <div class="inbox_people">

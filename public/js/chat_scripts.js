@@ -10,7 +10,8 @@ $(document).ready(function(){
             for(let friend of unique1) {
                 if (friend.id != myId) {
                     $('#friend_list').append(
-                        generateFriend(friend)
+                        generateFriend(friend),
+                        // alert(JSON.stringify(friend))
                     )
                 }
             }
@@ -35,18 +36,9 @@ $(document).ready(function(){
 
     $('#ddlist').empty().hide();
 
-    $('body').on('click','#message_item img',function(){
-        alert('it works');
-        let clicked_id = $(this).data('rooms_user_id');
-        alert(clicked_id);
-
-    });
-
     function generateMessage(myId=null, data) {
         localStorage.setItem('msg_clicked_id', data.user_id);
         let clicked_id = localStorage.getItem('msg_clicked_id');
-        // alert(clicked_id);
-
 
         let msgType = data.user_id == myId ? "out" : "in";
         let img = data.img_path;
@@ -69,7 +61,10 @@ $(document).ready(function(){
     };
 
     function generateFriend(friend){
-        return  ` <div class="chat_list" data-id=${ friend.id }>
+        // alert(friend.chat_name);
+        let name = JSON.stringify(friend.chat_name);
+        // alert(JSON.stringify(friend));
+        return  ` <div class="chat_list" data-id=${ friend.id } data-chat_name=${ name }>
                 <div class="chat_people">
                     <div class="chat_img">
                         <img src="storage/img_paths/${ friend.id }/${ friend.img_path }" alt="img loading error">
@@ -85,7 +80,7 @@ $(document).ready(function(){
     };
 
     function generateChat(chat){
-        return  `<div class="room_list" style='overflow: hidden' data-chat_id="${ chat.id }">
+        return  `<div class="room_list" style='overflow: hidden' data-chat_id="${ chat.id }" data-chat_room_name=${ chat.name }>
                     <div class="chat_people">
                         <div class="chat_img">
                             <img src="https://cdn.iconscout.com/icon/premium/png-256-thumb/chat-room-3-1058983.png" alt="img loading error">
@@ -98,8 +93,10 @@ $(document).ready(function(){
     };
 
     $(document).on ("click", ".chat_list", function () {
-        // alert("hi");
+
         localStorage.setItem('your_id', $(this).data('id'));
+        localStorage.setItem('your_name', $(this).data('chat_name'));
+
 
         $(this).siblings().removeClass('active_chat');
         $(this).siblings().removeClass('active_messaging');
@@ -117,6 +114,11 @@ $(document).ready(function(){
         $.ajax({
             url: "/chat/" + $(this).data("id"),
             success: function (data) {
+                let x = localStorage.getItem('your_name');
+                let y = localStorage.getItem('your_id');
+
+                document.getElementById("header").innerHTML = x + ' #' + y;
+
                 let myId = localStorage.getItem("my_id");
                 $(".msg_history").empty();
                 $(".write_msg").val('').attr('readonly', false);
@@ -135,6 +137,10 @@ $(document).ready(function(){
 
     $(document).on ("click", ".room_list", function (){
         localStorage.setItem('roomId', $(this).data('chat_id'));
+
+        // localStorage.setItem('your_id', $(this).data('id'));
+        localStorage.setItem('your_chat_name', $(this).data('chat_room_name'));
+
         var roomId = localStorage.getItem('roomId');
         $(".msg_history").empty();
 
@@ -155,6 +161,11 @@ $(document).ready(function(){
             url: "/checking/" + roomId,
             success: function (data) {
                 $(".write_msg").val('').attr('readonly', true);
+
+                let x = localStorage.getItem('your_chat_name');
+                let y = localStorage.getItem('roomId');
+
+                document.getElementById("header").innerHTML = x + ' #' + y;
 
                 if (data['status'] == true){
                     console.log('already in');
@@ -178,7 +189,6 @@ $(document).ready(function(){
             }
         });
     });
-
 
     $(document).on('change', '#searching', function() {
         myId = localStorage.getItem('my_id');
@@ -248,6 +258,51 @@ $(document).ready(function(){
                 }
             },
         });
+    });
+
+    $(document).on('click','#message_item img',function(){
+        let clicked_id = $(this).data('rooms_user_id');
+
+        $.ajax({
+            url: "/start_chat/" + clicked_id,
+            success: function (data) {
+                let myId = localStorage.getItem("my_id");
+
+                let x = localStorage.getItem('your_name');
+                let y = localStorage.getItem('your_id');
+
+                document.getElementById("header").innerHTML = x + ' #' + y;
+
+                if (clicked_id != myId){
+                    if (data['status'] == true){
+                        $(".msg_history").empty();
+                        $(".write_msg").val('').attr('readonly', false);
+
+                        $('.chat_list').removeClass('active_messaging');
+                        $('.chat_list').removeClass('active_chat');
+
+                        $('.room_list').removeClass('active_messaging');
+                        $('.room_list').removeClass('active_chat');
+
+                        let item = $("#friend_list").find(`[data-id=${clicked_id}]`);
+                        item.addClass("active_chat");
+                        item.addClass("active_messaging");
+                        localStorage.setItem('your_id', clicked_id);
+
+                        for(let d of data['messages']) {
+                            $(".msg_history").append(
+                                generateMessage(myId, d)
+                            )
+                            $(".msg_history").animate({scrollTop: $(".msg_history")[0].scrollHeight}, 10);
+                        }
+                    }
+                    else if (data['status'] == false){
+                        $('.inbox_chat').append(location.reload(true));
+                    }
+                }
+            }
+        });
+
     });
 
 

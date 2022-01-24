@@ -71,7 +71,7 @@ class SearchController extends Controller
             ->where('ch.type', '=', true)
             ->where('cu1.user_id', '=', Auth::id())
 //            ->where('cu2.user_id', '<>', 'cu1.user_id')
-            ->select('us.id', 'us.name', 'us.full_name', 'us.img_path', 'us.created_at')
+            ->select('us.id', 'us.name', 'us.full_name', 'us.img_path', 'us.created_at', 'ch.name as chat_name')
             ->orderBy('us.created_at')
             ->get();
     }
