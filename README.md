@@ -1,3 +1,9 @@
-Personal chat pet-project!
+# Personal chat pet-project!
 
-![image](https://user-images.githubusercontent.com/56166165/150929800-f17d1841-44d7-413a-a4e8-5670a67c7880.png)
+![image](https://user-images.githubusercontent.com/56166165/150930212-56aef569-bcc5-46ed-8869-c6b2bbd775ea.png)
+
+
+ Register            |   Login
+:-------------------------:|:-------------------------:
+ ![image](https://user-images.githubusercontent.com/56166165/150930628-28bfefe6-e335-47b0-acc6-fe30b1fca3a7.png) |  ![image](https://user-images.githubusercontent.com/56166165/150930396-068e339e-575e-4f82-85fc-785e79d2b3a1.png)
+
