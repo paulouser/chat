@@ -10,3 +10,12 @@
 
 
 ![image](https://user-images.githubusercontent.com/56166165/150932859-77dc5ae4-da9b-44ff-b7ba-ca4dbc257d17.png)
+
+
+
+Create new chat room!             |  Participate
+:-------------------------:|:-------------------------:
+![image](https://user-images.githubusercontent.com/56166165/150935565-fff0fa2c-66f9-4eda-af63-a092d115b705.png)  |  ![image](https://user-images.githubusercontent.com/56166165/150935429-7797dee5-a509-4332-a756-5db380723d47.png)
+
+
+
