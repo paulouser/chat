@@ -1,8 +1,10 @@
 <?php
 
 use App\Models\chat;
+use App\Events\ChatThread;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Console\Scheduling\Event;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,3 +54,11 @@ Route::get('/checking/{roomId}', 'App\Http\Controllers\UserController@create')->
 Route::get('/generate_searching_list/{search_message?}', 'App\Http\Controllers\SearchController@index')->name('search');
 Route::get('/add_friend_or_room/{friend_or_room_id}/{Type}', 'App\Http\Controllers\SearchController@create')->name('search');
 Route::get('/generate_friend_list_and_predefined_rooms/', 'App\Http\Controllers\SearchController@show')->name('search');
+
+
+Route::get('/test','App\Http\Controllers\Test@index')->name('test');
+
+Route::get('/test2',function(){
+    event(new ChatThread());
+    return null;
+});
