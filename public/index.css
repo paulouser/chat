@@ -1,0 +1,235 @@
+.flex{
+    display: flex;
+}
+.align-center
+{
+    align-items: center;
+
+}
+
+.justify-content-center{
+    justify-content: center;
+}
+text-center{
+    text-align: center;
+}
+.center{
+
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center;
+}
+w-full{
+    width: 100%;
+}
+h-full{
+    height: 100%;
+}
+.p-5{
+    padding: 5%;
+}
+.p-10{
+    padding: 10%;
+}
+.pt-5{
+    padding-top: 5%;
+}
+.pb-5{
+    padding-bottom: 5%;
+}
+.pl-5{
+    padding-left: 5%;
+}
+.pr-5{
+    padding-right: 5%;
+}
+.mb-10{
+    margin-bottom: 10%;
+}
+.item-message-recived{
+
+    padding: 1px;
+    background-color: lightgreen;
+}
+.body-message-sended{
+    text-align: right;
+}
+.body-message-recived{
+    gap: 10px;
+}
+.item-message-sended{
+    text-align: right;
+    padding: 1px;
+    background-color: blanchedalmond;
+}
+.full{
+    width: 100%;
+    height: 100%;
+}
+.justify-between{	justify-content: space-between;}
+.login-box{
+    width: 60%;
+    height: 40%;
+    background-color:beige !important;
+    border: 2px solid black;
+}
+.login-box-body {
+    width: 300px; /* largura desejada da caixa de login */
+    margin: 0 auto; /* centralizar horizontalmente */
+    padding: 20px; /* adicionar espaço interno */
+    border: 1px solid #ccc; /* adicionar borda */
+    border-radius: 5px; /* adicionar borda arredondada */
+}
+
+.login-box-msg {
+    margin-bottom: 20px; /* adicionar espaço abaixo do parágrafo */
+    text-align: center; /* centralizar texto */
+}
+
+.form-group {
+    margin-bottom: 20px; /* adicionar espaço entre os grupos de formulário */
+}
+
+.form-control {
+    width: 100%; /* ocupar a largura total do seu contêiner */
+    padding: 10px; /* adicionar espaço interno */
+    font-size: 16px; /* tamanho da fonte */
+    border: 1px solid #ccc; /* adicionar borda */
+    border-radius: 5px; /* adicionar borda arredondada */
+}
+
+.glyphicon {
+    position: absolute; /* posicionar os ícones */
+    top: 50%; /* alinhar no meio verticalmente */
+    transform: translateY(-50%); /* corrigir o alinhamento */
+    right: 10px; /* alinhar à direita */
+    color: #555; /* cor dos ícones */
+}
+
+.glyphicon-envelope {
+    color: #ccc; /* cor do ícone de envelope */
+}
+
+.glyphicon-lock {
+    color: #ccc; /* cor do ícone de cadeado */
+}
+
+.chat-box{
+    width: 60%;
+    height: 100%;
+    background-color:beige!important;
+
+}
+/* Estilo para a classe título */
+.titulo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333; /* Cor do texto */
+}
+
+/* Estilo para a classe subtítulo */
+.subtitulo {
+    font-size: 18px;
+    font-weight: normal;
+    color: #777; /* Cor do texto */
+}
+form {
+    width: 100%;
+
+    gap:2%;
+    /* Adicione estilos adicionais para o formulário, se necessário */
+}
+.input-custom1{
+    width: 100%; /* Definir largura do input como 100vw */
+    padding: 10px;
+    margin: 5px 0;
+
+}
+textarea {
+    width: 100%; /* Definir largura do input como 100vw */
+    padding: 10px;
+    margin: 5px 0;
+    height: 20%;
+
+}
+button[type="submit"] { /* Estilo para botão de envio */
+    width: 100%;
+    padding: 10px; /* Adiciona um preenchimento interno de 10px */
+    margin: 5px 0; /* Adiciona uma margem de 5px acima e abaixo */
+    border: 1px solid #ccc; /* Adiciona uma borda sólida de 1px cinza */
+    border-radius: 5px; /* Adiciona bordas arredondadas */
+}
+.messages-container{
+    width: 100%;
+    height: 70%;
+    overflow-y:scroll !important;
+}
+
+button[type="submit"] {
+    background-color: #007bff; /* Define a cor de fundo do botão */
+    color: #fff; /* Define a cor do texto do botão */
+    cursor: pointer; /* Altera o cursor ao passar sobre o botão */
+}
+
+/* Estilo para o botão de envio quando hover (quando o mouse passa sobre ele) */
+button[type="submit"]:hover {
+    background-color: #0056b3; /* Altera a cor de fundo ao passar o mouse */
+}
+.header2{
+
+    border:1px solid white;
+}
+
+/* Reset CSS básico */
+/* Reset CSS básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    max-width: 1200px;
+
+    padding: 0 20px;
+}
+
+.header {
+    background-color: #333;
+    color: #fff;
+    padding: 20px 0;
+}
+
+.logo {
+    font-size: 24px;
+}
+
+.nav {
+    margin-top: 10px;
+}
+
+.nav-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.nav-item {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.nav-item:last-child {
+    margin-right: 0;
+}
+
+.nav-item a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.nav-item a:hover {
+    text-decoration: underline;
+}
